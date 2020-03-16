@@ -61,12 +61,11 @@ const getCompaniesData = async setCompaniesList => {
 }
 
 const CompaniesTable = () => {
-    const [companiesList, setCompaniesList] = useState([]);
+    const [companiesList, setCompaniesList] = useState(null);
     useEffect(() => {getCompaniesData(setCompaniesList)}, []);
 
-    return (
-        companiesList.map(company => <CompanyTableElement company={company}/>)
-    )
+    if(companiesList) return companiesList.map(company => <CompanyTableElement company={company}/>)
+    else return <div>Loading</div>
 }
 
 export default CompaniesTable;
