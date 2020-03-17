@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import CompanyTableElement from 'components/molecules/CompanyTableElement.js';
 
+import { useStore } from 'store';
+
 const getBasicCompaniesData = basicCompaniesDataURL => {
     return fetch(basicCompaniesDataURL)
         .then(response => {
@@ -40,22 +42,24 @@ const addIncomesForEveryCompany = (basicCompaniesData, companyIncomesURL) => {
     return Promise.all(companyDataWithIncomes);
 }
 
-const getCompaniesData = async setCompaniesList => {
+const getCompaniesData = async (companiesInformations, dispatch) => {
+    if(companiesInformations) return
+
     const basicCompaniesDataURL = `https://recruitment.hal.skygate.io/companies`;
     const companyIncomesURL = `https://recruitment.hal.skygate.io/incomes/`;
 
     const basicCompaniesData = await getBasicCompaniesData(basicCompaniesDataURL);
     const companiesData = await addIncomesForEveryCompany(basicCompaniesData, companyIncomesURL);
     const sortedCompaniesData = sortCompaniesListDescending(companiesData);
-    setCompaniesList(sortedCompaniesData);
+    dispatch({ type: 'SET_COMPANIES_INFORMATIONS', payload: sortedCompaniesData })
 }
 
 const CompaniesTable = () => {
-    const [companiesList, setCompaniesList] = useState(null);
-    useEffect(() => {getCompaniesData(setCompaniesList)}, []);
+    const { state, dispatch } = useStore();
+    useEffect(() => {getCompaniesData(state.companiesInformations, dispatch)}, []);
 
-    if(companiesList) return companiesList.map(company => <CompanyTableElement company={company}/>)
-    else return <div>Loading</div>
+    if (state.companiesInformations) return state.companiesInformations.map(company => <CompanyTableElement company={company}/>)
+    else  return <div>Loading...</div>
 }
 
 export default CompaniesTable;
