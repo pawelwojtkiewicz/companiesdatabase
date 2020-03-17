@@ -37,15 +37,13 @@ const sortCompaniesListDescending = companiesData => {
 }
 
 const addIncomesForEveryCompany = (basicCompaniesData, companyIncomesURL) => {
-    const companyDataWithIncomes = basicCompaniesData.map(basicCompanyData => {
-        return new Promise((resolve, reject) => {
-            const companyId = basicCompanyData.id;
-            getIncomesFromCompany(companyIncomesURL, companyId)
-                .then(allIncomes => {
-                    const totalIncome = Math.round(submitCompanyIncome(allIncomes));
-                    resolve({...basicCompanyData, allIncomes, totalIncome});
-                });
-        });
+    const companyDataWithIncomes = basicCompaniesData.map(basicCompanyData =>{ 
+        const companyId = basicCompanyData.id;
+        return getIncomesFromCompany(companyIncomesURL, companyId)
+            .then(allIncomes => {
+                const totalIncome = Math.round(submitCompanyIncome(allIncomes));
+                return {...basicCompanyData, allIncomes, totalIncome};
+            });
     });
     return Promise.all(companyDataWithIncomes);
 }
