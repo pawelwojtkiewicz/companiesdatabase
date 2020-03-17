@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import CompanyTableElement from 'components/molecules/CompanyTableElement.js';
-
+import React, { useEffect } from 'react';
+import CompanyTableElement from 'components/organisms/CompanyTableElement.js';
 import { useStore } from 'store';
 
 const getBasicCompaniesData = basicCompaniesDataURL => {

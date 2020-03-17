@@ -7,7 +7,7 @@ const CompaniesTable = ({company}) => {
     
     if(redirect) return <Redirect to={`/companiesData/details/${company.id}`} />
     return (
-        <div onClick={handleCompanyDetails}>
+        <div>
             <br />
             <div>
                 {company.id}
@@ -21,6 +21,7 @@ const CompaniesTable = ({company}) => {
             <div>
                 {company.totalIncome}
             </div>
+            <button onClick={handleCompanyDetails}>GO</button>
             <br />
         </div>
     )
