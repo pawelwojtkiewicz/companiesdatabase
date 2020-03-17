@@ -16,11 +16,7 @@ const getIncomesFromCompany = (companyIncomesURL, companyId) => {
             if (response.ok) return response.json();
             else return "error";
         })
-        .then(response => {
-            const filterCompanyIncomes = response => response.incomes;
-            const companyIncomes = filterCompanyIncomes(response);
-            return companyIncomes;
-        })
+        .then(responce => responce.incomes)
         .catch(error => error);
 }
 
@@ -30,18 +26,14 @@ const submitCompanyIncome = incomes => {
     }, 0);
 };
 
-const sortCompaniesListDescending = companiesData => {
-    return companiesData.sort(function(a, b) {
-        return b.totalIncome - a.totalIncome;
-    });
-}
+const sortCompaniesListDescending = companiesData => companiesData.sort((a, b) => b.totalIncome - a.totalIncome);
 
 const addIncomesForEveryCompany = (basicCompaniesData, companyIncomesURL) => {
     const companyDataWithIncomes = basicCompaniesData.map(basicCompanyData =>{ 
         const companyId = basicCompanyData.id;
         return getIncomesFromCompany(companyIncomesURL, companyId)
             .then(allIncomes => {
-                const totalIncome = Math.round(submitCompanyIncome(allIncomes));
+                const totalIncome = submitCompanyIncome(allIncomes);
                 return {...basicCompanyData, allIncomes, totalIncome};
             });
     });
