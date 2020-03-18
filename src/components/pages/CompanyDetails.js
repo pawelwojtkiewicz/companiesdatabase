@@ -13,7 +13,7 @@ const getCompanyDetais = (companiesInformations, setCompanyDetails, pathname) =>
   if(!companiesInformations) return
 
   const currenCompanytId = getCurrentCompanyId(pathname);
-  const companyDetails = companiesInformations.find(companyInformation => companyInformation.id === currenCompanytId);
+  const companyDetails = companiesInformations.flat().find(companyInformation => companyInformation.id === currenCompanytId);
   setCompanyDetails(companyDetails)
 }
 
