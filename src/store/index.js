@@ -3,9 +3,8 @@ import React, { createContext, useReducer, useContext } from 'react';
 const defaultState = {
   companiesInformations: null,
   companiesPagination: {
-    currentPage: 1,
-    minPaginationPage: 1,
-    maxPaginationPage: 5,
+    currentPage: 0,
+    paginationRange: {min: 0, max: 4},
     maxGlobalPage: null,
   }
 };
@@ -22,40 +21,16 @@ const reducer = (state = defaultState, action = {}) => {
           currentPage: action.payload
         }
       };
-    case 'NEXT_CURRENT_PAGE':
+    case 'SET_PAGINATION_PAGE_RANGE':
       return { 
         ...state, 
         companiesPagination: {
           ...state.companiesPagination,
-          currentPage: state.currentPage++
-        }
-      };
-    case 'PREV_CURRENT_PAGE':
-       return { 
-        ...state, 
-        companiesPagination: {
-          ...state.companiesPagination,
-          currentPage: state.currentPage--
-        }
-      };
-    case 'SET_MIN_PAGINATION_PAGE':
-       return { 
-        ...state, 
-        companiesPagination: {
-          ...state.companiesPagination,
-          minPaginationPage: action.payload
-        }
-      };
-    case 'SET_MAX_PAGINATION_PAGE':
-       return { 
-        ...state, 
-        companiesPagination: {
-          ...state.companiesPagination,
-          maxPaginationPage: action.payload
+          paginationRange: action.payload
         }
       };
     case 'SET_MAX_PAGES':
-       return { 
+      return { 
         ...state, 
         companiesPagination: {
           ...state.companiesPagination,

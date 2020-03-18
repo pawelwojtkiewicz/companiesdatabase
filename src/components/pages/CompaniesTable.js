@@ -64,21 +64,15 @@ const getCompaniesData = async (companiesInformations, dispatch) => {
 
 const CompaniesTable = () => {
     const { state, dispatch } = useStore();
-    const {companiesInformations} = state;
+    const {companiesPagination, companiesInformations} = state;
     useEffect(() => {getCompaniesData(companiesInformations, dispatch)}, []);
     
     if (companiesInformations){
-        const {currentPage, minPaginationPage, maxPaginationPage, maxGlobalPage} = state.companiesPagination;
+        const {currentPage} = companiesPagination;
         return (
             <>
-                <Pagination 
-                    currentPage={currentPage} 
-                    maxGlobalPage={maxGlobalPage} 
-                    maxPaginationPages={5} 
-                    minPaginationPage={minPaginationPage} 
-                    maxPaginationPage={maxPaginationPage} 
-                />
-                {companiesInformations[(currentPage - 1)].map(company => <CompanyTableElement company={company}/>)}
+                <Pagination paginationParameters={companiesPagination} />
+                {companiesInformations[(currentPage)].map(company => <CompanyTableElement company={company}/>)}
             </>
         )
     } else return (
