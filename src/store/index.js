@@ -6,6 +6,12 @@ const defaultState = {
     currentPage: 0,
     paginationRange: {min: 0, max: 4},
     maxGlobalPage: null,
+  },
+  companiesFiltered: null,
+  companiesFilteredPagination: {
+    currentPage: 0,
+    paginationRange: {min: 0, max: 4},
+    maxGlobalPage: null,
   }
 };
 
@@ -13,7 +19,7 @@ const reducer = (state = defaultState, action = {}) => {
   switch (action.type) {
     case 'SET_COMPANIES_INFORMATIONS':
       return { ...state, companiesInformations: action.payload };
-    case 'SET_CURRENT_PAGE':
+    case 'SET_CURRENT_PAGE_COMPANIES_INFORMATIONS':
       return { 
         ...state, 
         companiesPagination: {
@@ -21,7 +27,7 @@ const reducer = (state = defaultState, action = {}) => {
           currentPage: action.payload
         }
       };
-    case 'SET_PAGINATION_PAGE_RANGE':
+    case 'SET_PAGINATION_PAGE_RANGE_COMPANIES_INFORMATIONS':
       return { 
         ...state, 
         companiesPagination: {
@@ -29,7 +35,7 @@ const reducer = (state = defaultState, action = {}) => {
           paginationRange: action.payload
         }
       };
-    case 'SET_MAX_PAGES':
+    case 'SET_MAX_PAGES_COMPANIES_INFORMATIONS':
       return { 
         ...state, 
         companiesPagination: {
@@ -37,6 +43,32 @@ const reducer = (state = defaultState, action = {}) => {
           maxGlobalPage: action.payload
         }
       };
+      case 'SET_COMPANIES_FILTERED':
+        return { ...state, companiesFiltered: action.payload };
+      case 'SET_CURRENT_PAGE_COMPANIES_FILTERED':
+        return { 
+          ...state, 
+          companiesFilteredPagination: {
+            ...state.companiesFilteredPagination,
+            currentPage: action.payload
+          }
+        };
+      case 'SET_PAGINATION_PAGE_RANGE_COMPANIES_FILTERED':
+        return { 
+          ...state, 
+          companiesFilteredPagination: {
+            ...state.companiesFilteredPagination,
+            paginationRange: action.payload
+          }
+        };
+      case 'SET_MAX_PAGES_COMPANIES_FILTERED':
+        return { 
+          ...state, 
+          companiesFilteredPagination: {
+            ...state.companiesFilteredPagination,
+            maxGlobalPage: action.payload
+          }
+        };
     default:
       return state;
   }

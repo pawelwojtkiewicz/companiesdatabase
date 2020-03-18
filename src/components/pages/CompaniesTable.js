@@ -58,7 +58,7 @@ const getCompaniesData = async (companiesInformations, dispatch) => {
     const sortedCompaniesData = sortCompaniesListDescending(companiesData);
     const splitedCompaniesData = splitResultIntoGroups(sortedCompaniesData);
     
-    dispatch({ type: 'SET_MAX_PAGES', payload: splitedCompaniesData.length });
+    dispatch({ type: 'SET_MAX_PAGES_COMPANIES_INFORMATIONS', payload: splitedCompaniesData.length });
     dispatch({ type: 'SET_COMPANIES_INFORMATIONS', payload: splitedCompaniesData });
 }
 
@@ -71,7 +71,7 @@ const CompaniesTable = () => {
         const {currentPage} = companiesPagination;
         return (
             <>
-                <Pagination paginationParameters={companiesPagination} />
+                <Pagination paginationParameters={companiesPagination} paginationType={"INFORMATIONS"}/>
                 {companiesInformations[(currentPage)].map(company => <CompanyTableElement company={company}/>)}
             </>
         )
