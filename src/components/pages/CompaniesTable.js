@@ -77,8 +77,8 @@ const filterCompanies = (searchInput, companiesInformations, dispatch) => {
 const clearfilterCompanies = (searchInput, dispatch) => {
     if(searchInput.current.value === "") return;
     searchInput.current.value = "";
-    dispatch({ type: 'SET_MAX_PAGES_COMPANIES_FILTERED', payload: 0 });
-    dispatch({ type: 'SET_COMPANIES_FILTERED', payload: null });
+
+    dispatch({ type: 'RESET_MAX_PAGES_COMPANIES_FILTERED'});
 }
 
 const CompaniesTable = () => {
@@ -91,26 +91,28 @@ const CompaniesTable = () => {
         const {currentPage} = companiesFilteredPagination;
         return (
             <>
+                FILTERED
                 <div>
                     <input type="text" ref={searchInput} />
                     <button onClick={() => filterCompanies(searchInput, companiesInformations, dispatch)}>find</button>
                     <button onClick={() => clearfilterCompanies(searchInput, dispatch)}>clear</button>
                 </div>
                 <Pagination paginationParameters={companiesFilteredPagination} paginationType={"FILTERED"}/>
-                {companiesFiltered[(currentPage)].map(company => <CompanyTableElement company={company}/>)}
+                {companiesFiltered[currentPage - 1].map(company => <CompanyTableElement company={company}/>)}
             </>
         )
     } else if (companiesInformations){
         const {currentPage} = companiesPagination;
         return (
             <>  
+                MAIN
                 <div>
                     <input type="text" ref={searchInput} />
                     <button onClick={() => filterCompanies(searchInput, companiesInformations, dispatch)}>find</button>
                     <button onClick={() => clearfilterCompanies(searchInput, dispatch)}>clear</button>
                 </div>
                 <Pagination paginationParameters={companiesPagination} paginationType={"INFORMATIONS"}/>
-                {companiesInformations[(currentPage)].map(company => <CompanyTableElement company={company}/>)}
+                {companiesInformations[currentPage - 1].map(company => <CompanyTableElement company={company}/>)}
             </>
         )
     } else {

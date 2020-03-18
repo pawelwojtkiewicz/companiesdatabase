@@ -15,10 +15,9 @@ const chosenEqualsMinPagination = (paginationType, dispatch, clickedPage) => {
     dispatch({ type: `SET_PAGINATION_PAGE_RANGE_COMPANIES_${paginationType}`, payload: {min: clickedPage - 3, max: clickedPage + 1}});
 }
 
-const chosenEqualsMaxPagination = (paginationType, dispatch, clickedPage, maxGlobalPage) => {
+const chosenEqualsMaxPagination = (paginationType, dispatch, clickedPage) => {
     dispatch({ type: `SET_CURRENT_PAGE_COMPANIES_${paginationType}`, payload: clickedPage});
-    if (clickedPage + 3 > maxGlobalPage) dispatch({ type: `SET_PAGINATION_PAGE_RANGE_COMPANIES_${paginationType}`, payload: {min: clickedPage - 1, max: maxGlobalPage}});
-    else dispatch({ type: `SET_PAGINATION_PAGE_RANGE_COMPANIES_${paginationType}`, payload: {min: clickedPage - 1, max: clickedPage + 3}});
+    dispatch({ type: `SET_PAGINATION_PAGE_RANGE_COMPANIES_${paginationType}`, payload: {min: clickedPage - 1, max: clickedPage + 3}});
 }
 
 const handlePagination = (event, paginationParameters, paginationType, dispatch) => {
@@ -28,10 +27,10 @@ const handlePagination = (event, paginationParameters, paginationType, dispatch)
     
     switch(clickedPage){
         case currentPage: return;
-        case 0:
+        case 1:
         case maxGlobalPage: return dispatch({ type: `SET_CURRENT_PAGE_COMPANIES_${paginationType}`, payload: clickedPage});
         case paginationRange.min: return chosenEqualsMinPagination(paginationType, dispatch, clickedPage);
-        case paginationRange.max: return chosenEqualsMaxPagination(paginationType, dispatch, clickedPage, maxGlobalPage);
+        case paginationRange.max: return chosenEqualsMaxPagination(paginationType, dispatch, clickedPage);
         default: return dispatch({ type: `SET_CURRENT_PAGE_COMPANIES_${paginationType}`, payload: clickedPage});
     }
 };
@@ -42,7 +41,7 @@ const Pagination = ({paginationParameters, paginationType}) => {
     const pages = createPaginationPages(paginationParameters);
     return (
         <div onClick={event => handlePagination(event, paginationParameters, paginationType, dispatch)}>
-            {pages.map(page => page === currentPage ? <button data-page={page}><strong>{page + 1}</strong></button> : <button data-page={page}>{page + 1}</button>)}
+            {pages.map(page => page === currentPage ? <button data-page={page}><strong>{page}</strong></button> : <button data-page={page}>{page}</button>)}
         </div>
     ) 
 }

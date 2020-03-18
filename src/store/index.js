@@ -3,14 +3,14 @@ import React, { createContext, useReducer, useContext } from 'react';
 const defaultState = {
   companiesInformations: null,
   companiesPagination: {
-    currentPage: 0,
-    paginationRange: {min: 0, max: 4},
+    currentPage: 1,
+    paginationRange: {min: 1, max: 5},
     maxGlobalPage: null,
   },
   companiesFiltered: null,
   companiesFilteredPagination: {
-    currentPage: 0,
-    paginationRange: {min: 0, max: 4},
+    currentPage: 1,
+    paginationRange: {min: 1, max: 5},
     maxGlobalPage: null,
   }
 };
@@ -67,6 +67,17 @@ const reducer = (state = defaultState, action = {}) => {
           companiesFilteredPagination: {
             ...state.companiesFilteredPagination,
             maxGlobalPage: action.payload
+          }
+        };
+      case 'RESET_MAX_PAGES_COMPANIES_FILTERED':
+        return { 
+          ...state,
+          companiesFiltered: null,
+          companiesFilteredPagination: {
+            ...state.companiesFilteredPagination,
+            currentPage: 1,
+            paginationRange: {min: 1, max: 5},
+            maxGlobalPage: null,
           }
         };
     default:
