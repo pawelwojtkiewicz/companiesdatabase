@@ -30,7 +30,10 @@ const submitCompanyIncome = incomes => {
 
 const sortCompaniesListDescending = companiesData => companiesData.sort((a, b) => b.totalIncome - a.totalIncome);
 
-const splitResultIntoGroups = array => array.map(element => array.splice(0, 10));
+const splitResultIntoGroups = (array, cache = []) => {
+    while (array.length) cache.push(array.splice(0, 10));
+    return cache;
+}
 
 const addIncomesForEveryCompany = (basicCompaniesData, companyIncomesURL) => {
     const companyDataWithIncomes = basicCompaniesData.map(basicCompanyData => { 
