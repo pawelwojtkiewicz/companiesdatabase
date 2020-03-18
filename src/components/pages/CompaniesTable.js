@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useStore } from 'store';
 import CompanyTableElement from 'components/organisms/CompanyTableElement.js';
 import Pagination from 'utilities/Pagination';
@@ -62,24 +62,64 @@ const getCompaniesData = async (companiesInformations, dispatch) => {
     dispatch({ type: 'SET_COMPANIES_INFORMATIONS', payload: splitedCompaniesData });
 }
 
+const filterCompanies = (searchInput, companiesInformations, dispatch) => {
+    if(searchInput.current.value === "") return;
+
+    const companiesFiltered = companiesInformations.flat().filter(companyData => companyData.name.toLowerCase().includes
+    (searchInput.current.value.toLowerCase())).map(companyData => companyData);
+    
+    const companiesFilteredSplited = splitResultIntoGroups(companiesFiltered)
+
+    dispatch({ type: 'SET_MAX_PAGES_COMPANIES_FILTERED', payload: companiesFilteredSplited.length });
+    dispatch({ type: 'SET_COMPANIES_FILTERED', payload: companiesFilteredSplited });
+}
+
+const clearfilterCompanies = (searchInput, dispatch) => {
+    if(searchInput.current.value === "") return;
+    searchInput.current.value = "";
+    dispatch({ type: 'SET_MAX_PAGES_COMPANIES_FILTERED', payload: 0 });
+    dispatch({ type: 'SET_COMPANIES_FILTERED', payload: null });
+}
+
 const CompaniesTable = () => {
     const { state, dispatch } = useStore();
-    const {companiesPagination, companiesInformations} = state;
+    const {companiesInformations, companiesPagination, companiesFiltered, companiesFilteredPagination} = state;
     useEffect(() => {getCompaniesData(companiesInformations, dispatch)}, []);
-    
-    if (companiesInformations){
-        const {currentPage} = companiesPagination;
+    const searchInput = useRef(null);
+
+    if(companiesFiltered){
+        const {currentPage} = companiesFilteredPagination;
         return (
             <>
+                <div>
+                    <input type="text" ref={searchInput} />
+                    <button onClick={() => filterCompanies(searchInput, companiesInformations, dispatch)}>find</button>
+                    <button onClick={() => clearfilterCompanies(searchInput, dispatch)}>clear</button>
+                </div>
+                <Pagination paginationParameters={companiesFilteredPagination} paginationType={"FILTERED"}/>
+                {companiesFiltered[(currentPage)].map(company => <CompanyTableElement company={company}/>)}
+            </>
+        )
+    } else if (companiesInformations){
+        const {currentPage} = companiesPagination;
+        return (
+            <>  
+                <div>
+                    <input type="text" ref={searchInput} />
+                    <button onClick={() => filterCompanies(searchInput, companiesInformations, dispatch)}>find</button>
+                    <button onClick={() => clearfilterCompanies(searchInput, dispatch)}>clear</button>
+                </div>
                 <Pagination paginationParameters={companiesPagination} paginationType={"INFORMATIONS"}/>
                 {companiesInformations[(currentPage)].map(company => <CompanyTableElement company={company}/>)}
             </>
         )
-    } else return (
-        <>
-            <div>Loading...</div> 
-        </>   
-    )
+    } else {
+        return (
+            <>
+                <div>Loading...</div> 
+            </>   
+        )
+    }
 }
 
 export default CompaniesTable;
