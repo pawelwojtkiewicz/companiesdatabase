@@ -21,7 +21,7 @@ const filterCompanies = (searchInput, companiesInformations, dispatch) => {
     
     const companiesFilteredSplited = splitResultIntoGroups(companiesFiltered)
     dispatch({ type: 'SET_MAX_PAGES_COMPANIES_FILTERED', payload: companiesFilteredSplited.length });
-    dispatch({ type: 'SET_COMPANIES_FILTERED', payload: companiesFilteredSplited });
+    dispatch({ type: 'SET_COMPANIES_FILTERED', payload: companiesFilteredSplited.length ? companiesFilteredSplited : null });
 }
 
 const clearfilterCompanies = (searchInput, dispatch) => {
@@ -34,6 +34,8 @@ const clearfilterCompanies = (searchInput, dispatch) => {
 const SearchBar = ({companiesInformations}) => {
     const { dispatch } = useStore();
     const searchInput = useRef(null);
+
+    console.log(companiesInformations)
 
     return (
         <StyledWrapper>
