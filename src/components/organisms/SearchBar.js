@@ -5,9 +5,28 @@ import InputText from 'components/atoms/InputText';
 import Button from 'components/atoms/Button';
 
 const StyledWrapper = styled.div`
+    display: flex;
+    flex-wrap: wrap;
     margin: 0 0 20px 0;
+
+    @media (max-width: 520px) {
+        & {
+            justify-content: center;
+        }
+    }
 `;
 
+const ButtonsContainer = styled.div`
+    display: flex;
+    
+    @media (max-width: 520px) {
+        & {
+            justify-content: center;
+            width: 100%;
+            margin: 20px 0;
+        }
+    }
+`;
 const splitResultIntoGroups = (array, cache = []) => {
     while (array.length) cache.push(array.splice(0, 10));
     return cache;
@@ -38,8 +57,10 @@ const SearchBar = ({companiesInformations}) => {
     return (
         <StyledWrapper>
             <InputText searcher ref={searchInput}/>
-            <Button searcher bgColor={"#7cc17c"} onClick={() => filterCompanies(searchInput, companiesInformations, dispatch)}>find</Button>
-            <Button searcher bgColor={"#ef5858"} onClick={() => clearfilterCompanies(searchInput, dispatch)}>clear</Button>
+            <ButtonsContainer>
+                <Button searcher bgColor={"#7cc17c"} onClick={() => filterCompanies(searchInput, companiesInformations, dispatch)}>find</Button>
+                <Button searcher bgColor={"#ef5858"} onClick={() => clearfilterCompanies(searchInput, dispatch)}>clear</Button>
+            </ButtonsContainer>
         </StyledWrapper>
     )
 }

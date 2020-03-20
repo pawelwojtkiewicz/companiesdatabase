@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useStore } from 'store';
 import MainTemplate from 'components/templates/MainTemplate'
 import CompanyTableElement from 'components/organisms/CompanyTableElement';
@@ -49,35 +49,35 @@ const addIncomesForEveryCompany = (basicCompaniesData, companyIncomesURL) => {
     return Promise.all(companyDataWithIncomes);
 }
 
-const handleError = (error, changeLoadingStatus, dispatch) => {
+const handleError = (error, dispatch) => {
     dispatch({ type: 'SET_COMPANIES_INFORMATIONS', payload: error });
-    changeLoadingStatus(false);
 }
 
-const getCompaniesData = async (companiesInformations, changeLoadingStatus, dispatch) => {
+const getCompaniesData = async (companiesInformations, dispatch) => {
     if(companiesInformations) return;
 
     const basicCompaniesDataURL = `https://recruitment.hal.skygate.io/companies`;
     const companyIncomesURL = `https://recruitment.hal.skygate.io/incomes/`;
 
     const basicCompaniesData = await getBasicCompaniesData(basicCompaniesDataURL);
-    if(basicCompaniesData.error) return handleError(basicCompaniesData, changeLoadingStatus, dispatch)
+    if(basicCompaniesData.error) return handleError(basicCompaniesData, dispatch)
     const companiesData = await addIncomesForEveryCompany(basicCompaniesData, companyIncomesURL);
-    if(companiesData.error) return handleError(companiesData, changeLoadingStatus, dispatch);
+    if(companiesData.error) return handleError(companiesData, dispatch);
     const sortedCompaniesData = sortCompaniesListDescending(companiesData);
     const splitedCompaniesData = splitResultIntoGroups(sortedCompaniesData);
     
     dispatch({ type: 'SET_MAX_PAGES_COMPANIES_INFORMATIONS', payload: splitedCompaniesData.length });
     dispatch({ type: 'SET_COMPANIES_INFORMATIONS', payload: splitedCompaniesData });
-    changeLoadingStatus(false);
 }
 
 const CompaniesTable = () => {
-    const [loadingStatus, changeLoadingStatus] = useState(true);
     const { state, dispatch } = useStore();
     const {companiesInformations, companiesPagination, companiesFiltered, companiesFilteredPagination} = state;
-    useEffect(() => {getCompaniesData(companiesInformations, changeLoadingStatus, dispatch)}, []);
-    
+    useEffect(() => {
+        getCompaniesData(companiesInformations, dispatch)
+    }, []);
+
+
     const Error = () => (<div>Fail to download date, please try again</div>)
 
     const MainTable = () => {
@@ -99,22 +99,19 @@ const CompaniesTable = () => {
         )
     }
 
-    if(loadingStatus){
-        return (
-            <>
-                <div>Loading...</div> 
-            </>   
-        )
-    } else if(!companiesInformations.error){
+    if(companiesInformations){
+        if(companiesInformations.error) return <Error />
         return (
             <MainTemplate>
                 <SearchBar companiesInformations={companiesInformations}/>
                 {companiesFiltered ? <FilteredTable /> : <MainTable />}
             </MainTemplate>
         )
-    } else if(companiesInformations){
-        return(
-            <Error />
+    } else {
+        return (
+            <>
+                <div>Loading...</div> 
+            </>   
         )
     }
 }

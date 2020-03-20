@@ -1,8 +1,23 @@
 import React, {useReducer} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import Button from 'components/atoms/Button';
 
 const StyledWrapper = styled.div`
+    margin: 20px 0 0 0;
+`;
+
+const Line = styled.div`
+    display: flex;
+    align-items: center;
+    height: 40px;
+`;
+
+const LineName = styled.div`
+    width: 120px;
+`;
+
+const LineValue = styled.div`
  
 `;
 
@@ -20,8 +35,8 @@ const calculateTotalAndAvarageIncome = (companyDetails, setTotalAndAvarageIncome
     const timeEnd = new Date(endDate).getTime();
     const filteredIncomes = filterIncomesByDateRange(allIncomes, timeStart, timeEnd);
     
-    const avarageIncome = summarizeAvarageValue(filteredIncomes);
-    const totalIncome = summarizeAllValues(filteredIncomes);
+    const avarageIncome = summarizeAvarageValue(filteredIncomes).toFixed(2)
+    const totalIncome = summarizeAllValues(filteredIncomes).toFixed(2)
     setTotalAndAvarageIncome({avarageIncome, totalIncome});
 }
 
@@ -37,8 +52,8 @@ const calculateTotalAndAvarageIncome = (companyDetails, setTotalAndAvarageIncome
 const CompanyAdvancedDetails = ({companyDetails}) => {
     const [totalAndAvarageIncome, setTotalAndAvarageIncome] = useReducer((state, newState) => ({...state, ...newState}),
         {
-          avarageIncome: null,
-          totalIncome: null
+          avarageIncome: "choose range",
+          totalIncome: "choose range"
         }
     );
     const [dateRange, setDateRange] = useReducer((state, newState) => ({...state, ...newState}),
@@ -53,15 +68,41 @@ const CompanyAdvancedDetails = ({companyDetails}) => {
     
     return (
         <StyledWrapper>
-            <div>
-                <div>totalIncome: {totalAndAvarageIncome.totalIncome || "choose range"}</div>
-                <div>avarageIncome: {totalAndAvarageIncome.avarageIncome || "choose range"}</div>
-            </div> 
-            <div>
-                <div>from <input type="date" name="startDate" onChange={handleInputDateRangeChange}/></div>
-                <div>to <input type="date" name="endDate" onChange={handleInputDateRangeChange}/></div>
-                <button onClick={() => calculateTotalAndAvarageIncome(companyDetails, setTotalAndAvarageIncome, dateRange)}>count</button>
-            </div>
+            <Line>
+                <LineName>
+                    totalIncome:
+                </LineName>
+                <LineValue>
+                    {totalAndAvarageIncome.totalIncome}
+                </LineValue>
+            </Line>
+            <Line>
+                <LineName>
+                    avarageIncome:
+                </LineName>
+                <LineValue>
+                    {totalAndAvarageIncome.avarageIncome}
+                </LineValue>
+            </Line>
+            <Line>
+                <LineName>
+                    from:
+                </LineName>
+                <LineValue>
+                    <input type="date" name="startDate" onChange={handleInputDateRangeChange}/>
+                </LineValue>
+            </Line>
+            <Line>
+                <LineName>
+                    to:
+                </LineName>
+                <LineValue>
+                    <input type="date" name="endDate" onChange={handleInputDateRangeChange}/>
+                </LineValue>
+            </Line>
+            <Button countRange bgColor={"#daa96c"} onClick={() => calculateTotalAndAvarageIncome(companyDetails, setTotalAndAvarageIncome, dateRange)}>
+                count
+            </Button>
         </StyledWrapper>
     )
 }

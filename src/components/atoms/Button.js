@@ -22,6 +22,21 @@ const Button = styled.button`
             height: 35px;
     `}
 
+    ${({ countRange }) => 
+        countRange &&
+        css`
+            width: 100px;
+            height: 35px;
+    `}
+
+    ${({ goBack }) => 
+        goBack &&
+        css`
+            width: 100px;
+            height: 35px;
+            margin: 10px 0 0 0;
+    `}
+
     ${({ pagination }) => 
         pagination &&
         css`

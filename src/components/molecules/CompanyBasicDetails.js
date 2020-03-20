@@ -7,11 +7,13 @@ const StyledWrapper = styled.div`
 `;
 
 const Line = styled.div`
- 
+    display: flex;
+    align-items: center;
+    height: 40px;
 `;
 
 const LineName = styled.div`
- 
+    width: 120px;
 `;
 
 const LineValue = styled.div`

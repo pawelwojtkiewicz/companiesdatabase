@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Redirect, Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { useStore } from 'store';
+import MainTemplate from 'components/templates/MainTemplate'
 import CompanyBasicDetails from 'components/molecules/CompanyBasicDetails';
 import CompanyAdvancedDetails from 'components/organisms/CompanyAdvancedDetails';
 import Button from 'components/atoms/Button';
@@ -58,11 +59,11 @@ const CompanyDetails = ({location}) => {
 
   if(!state.companiesInformations) return <Redirect to="/companiesData" />
   return (
-    <>
+    <MainTemplate>
       <CompanyBasicDetails companyDetails={companyDetails} lastMonthIncome={lastMonthIncome}/>
       <CompanyAdvancedDetails companyDetails={companyDetails}/>
-      <Button><Link to="/companiesData">BACK</Link></Button>
-    </>
+      <Button goBack bgColor={"#e686a1"}><Link to="/companiesData">BACK</Link></Button>
+    </MainTemplate>
   )
 };
 

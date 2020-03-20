@@ -6,14 +6,30 @@ import Button from 'components/atoms/Button';
 
 const StyledWrapper = styled.div`
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     height: 40px;
     
+    @media (max-width: 750px) {
+        & {
+            justify-content: center;
+            height: unset;
+            margin: 0 0 20px 0;
+        }
+    }
 `;
 
 const Column = styled.div`
     display: flex;
     width: 20%;
+
+    @media (max-width: 750px) {
+        & {
+            justify-content: center;
+            width: 100%;
+            min-height: 25px;
+        }
+    }
 `;
 
 const CompaniesTable = ({company}) => {
