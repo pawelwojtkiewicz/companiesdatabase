@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from 'store';
 import CompanyTableElement from 'components/organisms/CompanyTableElement.js';
 import Pagination from 'components/organisms/Pagination';
@@ -10,7 +10,7 @@ const getBasicCompaniesData = basicCompaniesDataURL => {
             if (response.ok) return response.json();
             else return "error";
         })
-        .catch(error => error);
+        .catch(errorDetails => ({error: true, errorDetails}));
 };
 
 const getIncomesFromCompany = (companyIncomesURL, companyId) => {
@@ -20,7 +20,7 @@ const getIncomesFromCompany = (companyIncomesURL, companyId) => {
             else return "error";
         })
         .then(responce => responce.incomes)
-        .catch(error => error);
+        .catch(errorDetails => ({error: true, errorDetails}));
 };
 
 const submitCompanyIncome = incomes => {
@@ -48,26 +48,37 @@ const addIncomesForEveryCompany = (basicCompaniesData, companyIncomesURL) => {
     return Promise.all(companyDataWithIncomes);
 }
 
-const getCompaniesData = async (companiesInformations, dispatch) => {
+const handleError = (error, changeLoadingStatus, dispatch) => {
+    dispatch({ type: 'SET_COMPANIES_INFORMATIONS', payload: error });
+    changeLoadingStatus(false);
+}
+
+const getCompaniesData = async (companiesInformations, changeLoadingStatus, dispatch) => {
     if(companiesInformations) return;
 
     const basicCompaniesDataURL = `https://recruitment.hal.skygate.io/companies`;
     const companyIncomesURL = `https://recruitment.hal.skygate.io/incomes/`;
 
     const basicCompaniesData = await getBasicCompaniesData(basicCompaniesDataURL);
+    if(basicCompaniesData.error) return handleError(basicCompaniesData, changeLoadingStatus, dispatch)
     const companiesData = await addIncomesForEveryCompany(basicCompaniesData, companyIncomesURL);
+    if(companiesData.error) return handleError(companiesData, changeLoadingStatus, dispatch);
     const sortedCompaniesData = sortCompaniesListDescending(companiesData);
     const splitedCompaniesData = splitResultIntoGroups(sortedCompaniesData);
     
     dispatch({ type: 'SET_MAX_PAGES_COMPANIES_INFORMATIONS', payload: splitedCompaniesData.length });
     dispatch({ type: 'SET_COMPANIES_INFORMATIONS', payload: splitedCompaniesData });
+    changeLoadingStatus(false);
 }
 
 const CompaniesTable = () => {
+    const [loadingStatus, changeLoadingStatus] = useState(true);
     const { state, dispatch } = useStore();
     const {companiesInformations, companiesPagination, companiesFiltered, companiesFilteredPagination} = state;
-    useEffect(() => {getCompaniesData(companiesInformations, dispatch)}, []);
+    useEffect(() => {getCompaniesData(companiesInformations, changeLoadingStatus, dispatch)}, []);
     
+    const Error = () => (<div>Fail to download date, please try again</div>)
+
     const MainTable = () => {
         const {currentPage} = companiesPagination;
         return (
@@ -86,19 +97,23 @@ const CompaniesTable = () => {
             </>
         )
     }
-    
-    if(companiesInformations){
+
+    if(loadingStatus){
+        return (
+            <>
+                <div>Loading...</div> 
+            </>   
+        )
+    } else if(!companiesInformations.error){
         return (
             <>
                 <SearchBar companiesInformations={companiesInformations}/>
                 {companiesFiltered ? <FilteredTable /> : <MainTable />}
             </>
         )
-    } else {
-        return (
-            <>
-                <div>Loading...</div> 
-            </>   
+    } else if(companiesInformations){
+        return(
+            <Error />
         )
     }
 }

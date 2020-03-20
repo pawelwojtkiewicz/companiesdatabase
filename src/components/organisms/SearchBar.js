@@ -35,8 +35,6 @@ const SearchBar = ({companiesInformations}) => {
     const { dispatch } = useStore();
     const searchInput = useRef(null);
 
-    console.log(companiesInformations)
-
     return (
         <StyledWrapper>
             <InputText ref={searchInput}/>
