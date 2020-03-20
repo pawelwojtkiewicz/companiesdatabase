@@ -1,5 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import { useStore } from 'store';
+import Button from 'components/atoms/Button';
+
+const StyledWrapper = styled.div`
+ 
+`;
 
 const createPaginationPages = (paginationParameters, pages = []) => {
     const {paginationRange, maxGlobalPage} = paginationParameters;
@@ -40,10 +47,22 @@ const Pagination = ({paginationParameters, paginationType}) => {
     const { dispatch } = useStore();
     const pages = createPaginationPages(paginationParameters);
     return (
-        <div onClick={event => handlePagination(event, paginationParameters, paginationType, dispatch)}>
-            {pages.map(page => page === currentPage ? <button data-page={page}><strong>{page}</strong></button> : <button data-page={page}>{page}</button>)}
-        </div>
+        <StyledWrapper onClick={event => handlePagination(event, paginationParameters, paginationType, dispatch)}>
+            {pages.map(page => <Button data-page={page} active={page === currentPage} key={page}>{page}</Button>)}
+        </StyledWrapper>
     ) 
 }
+
+Pagination.propTypes = {
+    paginationParameters: PropTypes.shape({
+        currentPage: PropTypes.number.isRequired,
+        paginationRange: PropTypes.shape({
+            min: PropTypes.number.isRequired,
+            max: PropTypes.number.isRequired,
+        }).isRequired,
+        maxGlobalPage: PropTypes.number.isRequired,
+    }).isRequired,
+    paginationType: PropTypes.string.isRequired
+};
 
 export default Pagination;

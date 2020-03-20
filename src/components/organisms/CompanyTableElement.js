@@ -1,5 +1,17 @@
 import React, {useState} from 'react';
+import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
+import styled from 'styled-components';
+import Button from 'components/atoms/Button';
+
+const StyledWrapper = styled.div`
+    display: flex;
+`;
+
+const Column = styled.div`
+    display: flex;
+    width: 20%;
+`;
 
 const CompaniesTable = ({company}) => {
     const [redirect, setRedirect] = useState(false);
@@ -7,24 +19,37 @@ const CompaniesTable = ({company}) => {
     
     if(redirect) return <Redirect to={`/companiesData/details/${company.id}`} />
     return (
-        <div>
-            <br />
-            <div>
+        <StyledWrapper>
+            <Column>
                 {company.id}
-            </div>
-            <div>
+            </Column>
+            <Column>
                 {company.name}
-            </div>
-            <div>
+            </Column>
+            <Column>
                 {company.city}
-            </div>
-            <div>
-                {company.totalIncome}
-            </div>
-            <button onClick={handleCompanyDetails}>GO</button>
-            <br />
-        </div>
+            </Column>
+            <Column>
+                {company.totalIncome.toFixed(2)} €
+            </Column>
+            <Column>
+                <Button onClick={handleCompanyDetails}>GO</Button>
+            </Column>
+        </StyledWrapper>
     )
 }
+
+CompaniesTable.propTypes = {
+    company: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+        city: PropTypes.string.isRequired,
+        allIncomes: PropTypes.arrayOf(PropTypes.shape({
+            value: PropTypes.string.isRequired,
+            date: PropTypes.string.isRequired
+          })).isRequired,
+        totalIncome: PropTypes.number.isRequired
+    }).isRequired
+};
 
 export default CompaniesTable;

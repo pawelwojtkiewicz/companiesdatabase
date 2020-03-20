@@ -1,7 +1,11 @@
-import React, {useState, useEffect, useReducer} from 'react';
+import React, {useState, useEffect} from 'react';
+import PropTypes from 'prop-types';
 import { Redirect, Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { useStore } from 'store';
+import CompanyBasicDetails from 'components/molecules/CompanyBasicDetails';
+import CompanyAdvancedDetails from 'components/organisms/CompanyAdvancedDetails';
+import Button from 'components/atoms/Button';
 
 const getCurrentCompanyId = pathname => {
   const parts = pathname.split("/");
@@ -46,78 +50,26 @@ const handleLastMonthIncome = (companyDetails, setLastMonthIncome) => {
   setLastMonthIncome(summarizedLatestsDateIncomes);
 }
 
-const validateTotalAndAvarageIncome = dateRange => Object.values(dateRange).every(date => date !== null && date !== "")
-
-const filterIncomesByDateRange = (allIncomes, timeStart, timeEnd) => allIncomes.filter(income => new Date(income.date).getTime() >= timeStart && new Date(income.date).getTime() <= timeEnd);
-
-const summarizeAvarageValue = incomes => {
-  if(!incomes.length) return 0;
-  return incomes.reduce((acc, currentValue) => (acc + Number(currentValue.value)), 0) / incomes.length;
-}
-
-const calculateTotalAndAvarageIncome = (companyDetails, setTotalAndAvarageIncome, dateRange) => {
-  const validationResult = validateTotalAndAvarageIncome(dateRange);
-  if (!validationResult) return setTotalAndAvarageIncome({avarageIncome: null, totalIncome: null});
-  const {allIncomes} = companyDetails;
-  const {startDate, endDate} = dateRange
-  const timeStart = new Date(startDate).getTime();
-  const timeEnd = new Date(endDate).getTime();
-  const filteredIncomes = filterIncomesByDateRange(allIncomes, timeStart, timeEnd);
-  
-  const avarageIncome = summarizeAvarageValue(filteredIncomes);
-  const totalIncome = summarizeAllValues(filteredIncomes);
-  setTotalAndAvarageIncome({avarageIncome, totalIncome});
-}
-
 const CompanyDetails = ({location}) => {
   const { state } = useStore();
-
   const [companyDetails, setCompanyDetails] = useState(getCompanyDetais(state.companiesInformations, location.pathname));
   const [lastMonthIncome, setLastMonthIncome] = useState(0);
-  const [totalAndAvarageIncome, setTotalAndAvarageIncome] = useReducer(
-    (state, newState) => ({...state, ...newState}),
-    {
-      avarageIncome: null,
-      totalIncome: null
-    }
-  );
-  const [dateRange, setDateRange] = useReducer(
-    (state, newState) => ({...state, ...newState}),
-    {
-      startDate: null,
-      endDate: null
-    }
-  );
-  const handleInputDateRangeChange = event => {
-    setDateRange({
-      [event.target.name]: event.target.value
-    })
-  }
   useEffect(() => handleLastMonthIncome(companyDetails, setLastMonthIncome), []);
 
   if(!state.companiesInformations) return <Redirect to="/companiesData" />
   return (
     <>
-      <div>
-        <div>id: {companyDetails.id}</div>
-        <div>name: {companyDetails.name}</div>
-        <div>city: {companyDetails.city}</div>
-        <div>last month income: {lastMonthIncome}</div>
-      </div>
-      <div>
-        <div>totalIncome: {totalAndAvarageIncome.totalIncome || "choose range"}</div>
-        <div>avarageIncome: {totalAndAvarageIncome.avarageIncome || "choose range"}</div>
-      </div> 
-      <div>
-        <div>from <input type="date" name="startDate" onChange={handleInputDateRangeChange}/></div>
-        <div>to <input type="date" name="endDate" onChange={handleInputDateRangeChange}/></div>
-        <button onClick={() => calculateTotalAndAvarageIncome(companyDetails, setTotalAndAvarageIncome, dateRange)}>count</button>
-      </div>
-      <button><Link to="/companiesData">BACK</Link></button>
+      <CompanyBasicDetails companyDetails={companyDetails} lastMonthIncome={lastMonthIncome}/>
+      <CompanyAdvancedDetails companyDetails={companyDetails}/>
+      <Button><Link to="/companiesData">BACK</Link></Button>
     </>
   )
 };
 
-export default withRouter(CompanyDetails);
+CompanyDetails.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired
+  }).isRequired
+};
 
-//<div>totalIncome ( old ): {companyDetails.totalIncome}</div>
+export default withRouter(CompanyDetails);

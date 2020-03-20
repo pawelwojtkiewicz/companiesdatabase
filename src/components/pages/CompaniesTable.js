@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useStore } from 'store';
 import CompanyTableElement from 'components/organisms/CompanyTableElement.js';
-import Pagination from 'utilities/Pagination';
+import Pagination from 'components/organisms/Pagination';
+import SearchBar from 'components/organisms/SearchBar.js';
 
 const getBasicCompaniesData = basicCompaniesDataURL => {
     return fetch(basicCompaniesDataURL)
@@ -62,57 +63,35 @@ const getCompaniesData = async (companiesInformations, dispatch) => {
     dispatch({ type: 'SET_COMPANIES_INFORMATIONS', payload: splitedCompaniesData });
 }
 
-const filterCompanies = (searchInput, companiesInformations, dispatch) => {
-    if(searchInput.current.value === "") return;
-
-    const companiesFiltered = companiesInformations.flat().filter(companyData => companyData.name.toLowerCase().includes
-    (searchInput.current.value.toLowerCase())).map(companyData => companyData);
-    
-    const companiesFilteredSplited = splitResultIntoGroups(companiesFiltered)
-
-    dispatch({ type: 'SET_MAX_PAGES_COMPANIES_FILTERED', payload: companiesFilteredSplited.length });
-    dispatch({ type: 'SET_COMPANIES_FILTERED', payload: companiesFilteredSplited });
-}
-
-const clearfilterCompanies = (searchInput, dispatch) => {
-    if(searchInput.current.value === "") return;
-    searchInput.current.value = "";
-
-    dispatch({ type: 'RESET_MAX_PAGES_COMPANIES_FILTERED'});
-}
-
 const CompaniesTable = () => {
     const { state, dispatch } = useStore();
     const {companiesInformations, companiesPagination, companiesFiltered, companiesFilteredPagination} = state;
     useEffect(() => {getCompaniesData(companiesInformations, dispatch)}, []);
-    const searchInput = useRef(null);
-
-    if(companiesFiltered){
-        const {currentPage} = companiesFilteredPagination;
-        return (
-            <>
-                FILTERED
-                <div>
-                    <input type="text" ref={searchInput} />
-                    <button onClick={() => filterCompanies(searchInput, companiesInformations, dispatch)}>find</button>
-                    <button onClick={() => clearfilterCompanies(searchInput, dispatch)}>clear</button>
-                </div>
-                <Pagination paginationParameters={companiesFilteredPagination} paginationType={"FILTERED"}/>
-                {companiesFiltered[currentPage - 1].map(company => <CompanyTableElement company={company}/>)}
-            </>
-        )
-    } else if (companiesInformations){
+    
+    const MainTable = () => {
         const {currentPage} = companiesPagination;
         return (
             <>  
-                MAIN
-                <div>
-                    <input type="text" ref={searchInput} />
-                    <button onClick={() => filterCompanies(searchInput, companiesInformations, dispatch)}>find</button>
-                    <button onClick={() => clearfilterCompanies(searchInput, dispatch)}>clear</button>
-                </div>
+                {companiesInformations[currentPage - 1].map(company => <CompanyTableElement company={company} key={company.id}/>)}
                 <Pagination paginationParameters={companiesPagination} paginationType={"INFORMATIONS"}/>
-                {companiesInformations[currentPage - 1].map(company => <CompanyTableElement company={company}/>)}
+            </>
+        )
+    }
+    const FilteredTable = () => {
+        const {currentPage} = companiesFilteredPagination;
+        return (
+            <>
+                {companiesFiltered[currentPage - 1].map(company => <CompanyTableElement company={company} key={company.id}/>)}
+                <Pagination paginationParameters={companiesFilteredPagination} paginationType={"FILTERED"}/>          
+            </>
+        )
+    }
+    
+    if(companiesInformations){
+        return (
+            <>
+                <SearchBar companiesInformations={companiesInformations}/>
+                {companiesFiltered ? <FilteredTable /> : <MainTable />}
             </>
         )
     } else {
