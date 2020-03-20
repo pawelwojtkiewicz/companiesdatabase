@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useStore } from 'store';
-import CompanyTableElement from 'components/organisms/CompanyTableElement.js';
+import MainTemplate from 'components/templates/MainTemplate'
+import CompanyTableElement from 'components/organisms/CompanyTableElement';
 import Pagination from 'components/organisms/Pagination';
-import SearchBar from 'components/organisms/SearchBar.js';
+import SearchBar from 'components/organisms/SearchBar';
 
 const getBasicCompaniesData = basicCompaniesDataURL => {
     return fetch(basicCompaniesDataURL)
@@ -106,10 +107,10 @@ const CompaniesTable = () => {
         )
     } else if(!companiesInformations.error){
         return (
-            <>
+            <MainTemplate>
                 <SearchBar companiesInformations={companiesInformations}/>
                 {companiesFiltered ? <FilteredTable /> : <MainTable />}
-            </>
+            </MainTemplate>
         )
     } else if(companiesInformations){
         return(

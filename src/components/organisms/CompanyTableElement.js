@@ -6,6 +6,9 @@ import Button from 'components/atoms/Button';
 
 const StyledWrapper = styled.div`
     display: flex;
+    align-items: center;
+    height: 40px;
+    
 `;
 
 const Column = styled.div`
@@ -33,7 +36,7 @@ const CompaniesTable = ({company}) => {
                 {company.totalIncome.toFixed(2)} €
             </Column>
             <Column>
-                <Button onClick={handleCompanyDetails}>GO</Button>
+                <Button moreDetails bgColor={"#daa96c"} onClick={handleCompanyDetails}>DETAILS</Button>
             </Column>
         </StyledWrapper>
     )

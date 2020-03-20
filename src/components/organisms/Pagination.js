@@ -5,7 +5,8 @@ import { useStore } from 'store';
 import Button from 'components/atoms/Button';
 
 const StyledWrapper = styled.div`
- 
+    display: flex;
+    justify-content: center;
 `;
 
 const createPaginationPages = (paginationParameters, pages = []) => {
@@ -48,7 +49,7 @@ const Pagination = ({paginationParameters, paginationType}) => {
     const pages = createPaginationPages(paginationParameters);
     return (
         <StyledWrapper onClick={event => handlePagination(event, paginationParameters, paginationType, dispatch)}>
-            {pages.map(page => <Button data-page={page} active={page === currentPage} key={page}>{page}</Button>)}
+            {pages.map(page => <Button data-page={page} activePagination={page === currentPage} pagination key={page}>{page}</Button>)}
         </StyledWrapper>
     ) 
 }

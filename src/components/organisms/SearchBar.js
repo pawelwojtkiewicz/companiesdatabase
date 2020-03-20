@@ -5,7 +5,7 @@ import InputText from 'components/atoms/InputText';
 import Button from 'components/atoms/Button';
 
 const StyledWrapper = styled.div`
- 
+    margin: 0 0 20px 0;
 `;
 
 const splitResultIntoGroups = (array, cache = []) => {
@@ -37,9 +37,9 @@ const SearchBar = ({companiesInformations}) => {
 
     return (
         <StyledWrapper>
-            <InputText ref={searchInput}/>
-            <Button onClick={() => filterCompanies(searchInput, companiesInformations, dispatch)}>find</Button>
-            <Button onClick={() => clearfilterCompanies(searchInput, dispatch)}>clear</Button>
+            <InputText searcher ref={searchInput}/>
+            <Button searcher bgColor={"#7cc17c"} onClick={() => filterCompanies(searchInput, companiesInformations, dispatch)}>find</Button>
+            <Button searcher bgColor={"#ef5858"} onClick={() => clearfilterCompanies(searchInput, dispatch)}>clear</Button>
         </StyledWrapper>
     )
 }
