@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useStore } from 'store';
 import InputText from 'components/atoms/InputText';
@@ -50,18 +50,21 @@ const clearfilterCompanies = (searchInput, dispatch) => {
     dispatch({ type: 'RESET_MAX_PAGES_COMPANIES_FILTERED'});
 }
 
-const SearchBar = ({companiesInformations}) => {
+const SearchBar = ({children, companiesInformations}) => {
     const { dispatch } = useStore();
     const searchInput = useRef(null);
 
     return (
-        <StyledWrapper>
-            <InputText searcher ref={searchInput}/>
-            <ButtonsContainer>
-                <Button searcher bgColor={"#7cc17c"} onClick={() => filterCompanies(searchInput, companiesInformations, dispatch)}>find</Button>
-                <Button searcher bgColor={"#ef5858"} onClick={() => clearfilterCompanies(searchInput, dispatch)}>clear</Button>
-            </ButtonsContainer>
-        </StyledWrapper>
+        <>
+            <StyledWrapper>
+                <InputText searcher ref={searchInput} />
+                <ButtonsContainer>
+                    <Button searcher bgColor={"#7cc17c"} onClick={() => filterCompanies(searchInput, companiesInformations, dispatch)}>find</Button>
+                    <Button searcher bgColor={"#ef5858"} onClick={() => clearfilterCompanies(searchInput, dispatch)}>clear</Button>
+                </ButtonsContainer>
+            </StyledWrapper>
+            {children}
+        </>
     )
 }
 

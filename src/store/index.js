@@ -17,8 +17,11 @@ const defaultState = {
 
 const reducer = (state = defaultState, action = {}) => {
   switch (action.type) {
-    case 'SET_COMPANIES_INFORMATIONS':
-      return { ...state, companiesInformations: action.payload };
+    case 'SET_COMPANIES_INFORMATIONS_RESULT':
+      return { ...state, companiesInformations: action.payload};
+
+
+
     case 'SET_CURRENT_PAGE_COMPANIES_INFORMATIONS':
       return { 
         ...state, 

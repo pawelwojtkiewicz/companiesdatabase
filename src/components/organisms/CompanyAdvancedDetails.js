@@ -117,7 +117,7 @@ CompanyAdvancedDetails.propTypes = {
             date: PropTypes.string.isRequired
         })).isRequired,
         totalIncome: PropTypes.number.isRequired
-    })
+    }).isRequired
 };
 
 export default CompanyAdvancedDetails;

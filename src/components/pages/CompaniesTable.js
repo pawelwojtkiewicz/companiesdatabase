@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useStore } from 'store';
 import MainTemplate from 'components/templates/MainTemplate'
-import CompanyTableElement from 'components/organisms/CompanyTableElement';
-import Pagination from 'components/organisms/Pagination';
 import SearchBar from 'components/organisms/SearchBar';
+import FilteredCompaniesTable from 'components/organisms/FilteredCompaniesTable';
+import AllCompaniesTable from 'components/organisms/AllCompaniesTable';
 
 const getBasicCompaniesData = basicCompaniesDataURL => {
     return fetch(basicCompaniesDataURL)
@@ -65,55 +65,42 @@ const getCompaniesData = async (companiesInformations, dispatch) => {
     if(companiesData.error) return handleError(companiesData, dispatch);
     const sortedCompaniesData = sortCompaniesListDescending(companiesData);
     const splitedCompaniesData = splitResultIntoGroups(sortedCompaniesData);
-    
+
     dispatch({ type: 'SET_MAX_PAGES_COMPANIES_INFORMATIONS', payload: splitedCompaniesData.length });
-    dispatch({ type: 'SET_COMPANIES_INFORMATIONS', payload: splitedCompaniesData });
+    dispatch({ type: 'SET_COMPANIES_INFORMATIONS_RESULT', payload: splitedCompaniesData });
 }
 
 const CompaniesTable = () => {
     const { state, dispatch } = useStore();
-    const {companiesInformations, companiesPagination, companiesFiltered, companiesFilteredPagination} = state;
+    const [companiesDataError, setCompaniesDataError] = useState();
+    const {companiesInformations, companiesFiltered} = state;
+
     useEffect(() => {
-        getCompaniesData(companiesInformations, dispatch)
+        getCompaniesData(companiesInformations, dispatch);
     }, []);
 
+    const ErrorMessage = () => (<div>Fail to download date, please try again</div>)
+    const Loading = () => (<div>Ładowanie</div>)
 
-    const Error = () => (<div>Fail to download date, please try again</div>)
+    const MainTable = () => (
+        companiesFiltered
+            ? <FilteredCompaniesTable></FilteredCompaniesTable>
+            : <AllCompaniesTable></AllCompaniesTable>
+    )
 
-    const MainTable = () => {
-        const {currentPage} = companiesPagination;
-        return (
-            <>  
-                {companiesInformations[currentPage - 1].map(company => <CompanyTableElement company={company} key={company.id}/>)}
-                <Pagination paginationParameters={companiesPagination} paginationType={"INFORMATIONS"}/>
-            </>
-        )
-    }
-    const FilteredTable = () => {
-        const {currentPage} = companiesFilteredPagination;
-        return (
-            <>
-                {companiesFiltered[currentPage - 1].map(company => <CompanyTableElement company={company} key={company.id}/>)}
-                <Pagination paginationParameters={companiesFilteredPagination} paginationType={"FILTERED"}/>          
-            </>
-        )
-    }
-
-    if(companiesInformations){
-        if(companiesInformations.error) return <Error />
-        return (
-            <MainTemplate>
-                <SearchBar companiesInformations={companiesInformations}/>
-                {companiesFiltered ? <FilteredTable /> : <MainTable />}
-            </MainTemplate>
-        )
-    } else {
-        return (
-            <>
-                <div>Loading...</div> 
-            </>   
-        )
-    }
-}
+    if(companiesInformations) return (
+        <MainTemplate>
+            {companiesDataError
+                ? <ErrorMessage></ErrorMessage>
+                : <SearchBar companiesInformations={companiesInformations}><MainTable /></SearchBar>
+            }
+        </MainTemplate>
+    ) 
+    else return (
+        <MainTemplate>
+            <Loading />
+        </MainTemplate>
+    );
+}; 
 
 export default CompaniesTable;
