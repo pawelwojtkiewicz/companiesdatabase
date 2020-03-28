@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useStore } from 'store';
 import MainTemplate from 'components/templates/MainTemplate'
 import SearchBar from 'components/organisms/SearchBar';
-import FilteredCompaniesTable from 'components/organisms/FilteredCompaniesTable';
-import AllCompaniesTable from 'components/organisms/AllCompaniesTable';
+import FilteredCompaniesTable from 'components/molecules/FilteredCompaniesTable';
+import AllCompaniesTable from 'components/molecules/AllCompaniesTable';
 
 const getBasicCompaniesData = basicCompaniesDataURL => {
     return fetch(basicCompaniesDataURL)
