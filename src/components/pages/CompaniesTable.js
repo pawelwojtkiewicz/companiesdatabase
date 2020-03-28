@@ -11,19 +11,25 @@ const getBasicCompaniesData = basicCompaniesDataURL => {
     return fetch(basicCompaniesDataURL)
         .then(response => {
             if (response.ok) return response.json();
-            else return "error";
+            else return {error: "Can't get data, please refresh"};
         })
-        .catch(errorDetails => ({error: true, errorDetails}));
+        .catch(err => {
+            console.log("get companies data error");
+            return {error: "Can't get data, please check the Interner connection and refresh"}
+        });
 };
 
 const getIncomesFromCompany = (companyIncomesURL, companyId) => {
     return fetch(companyIncomesURL + companyId)
         .then(response => {
             if (response.ok) return response.json();
-            else return "error";
+            else return {error: "Can't get data, please refresh"};
         })
         .then(responce => responce.incomes)
-        .catch(errorDetails => ({error: true, errorDetails}));
+        .catch(error => {
+            console.log("get company income error");
+            return {error: "Can't get data, please check the Interner connection and refresh"}
+        });
 };
 
 const submitCompanyIncome = incomes => {
@@ -34,54 +40,46 @@ const submitCompanyIncome = incomes => {
 
 const sortCompaniesListDescending = companiesData => companiesData.sort((a, b) => b.totalIncome - a.totalIncome);
 
-const addIncomesForEveryCompany = (basicCompaniesData, companyIncomesURL) => {
+const addIncomesForEveryCompany = (basicCompaniesData, companyIncomesURL, setStatusAllCompaniesDataLoaded) => {
     const companyDataWithIncomes = basicCompaniesData.map(basicCompanyData => { 
         const companyId = basicCompanyData.id;
         return getIncomesFromCompany(companyIncomesURL, companyId)
             .then(allIncomes => {
                 const totalIncome = submitCompanyIncome(allIncomes);
                 return {...basicCompanyData, allIncomes, totalIncome};
-            });
+            })
+            .catch(() => {
+                setStatusAllCompaniesDataLoaded(true);
+                return [];
+            })
     })
     return Promise.all(companyDataWithIncomes);
 }
 
-const handleError = (error, dispatch) => {
-    dispatch({ type: 'SET_COMPANIES_INFORMATIONS', payload: error });
-}
-
-const getCompaniesData = async (companiesInformations, dispatch) => {
-    if(companiesInformations) return;
-
-    const basicCompaniesDataURL = `https://recruitment.hal.skygate.io/companies`;
-    const companyIncomesURL = `https://recruitment.hal.skygate.io/incomes/`;
-
-    const basicCompaniesData = await getBasicCompaniesData(basicCompaniesDataURL);
-    if(basicCompaniesData.error) return handleError(basicCompaniesData, dispatch)
-    const companiesData = await addIncomesForEveryCompany(basicCompaniesData, companyIncomesURL);
-    if(companiesData.error) return handleError(companiesData, dispatch);
-    const sortedCompaniesData = sortCompaniesListDescending(companiesData);
-
-    dispatch({ type: 'SET_MAX_PAGES_COMPANIES_INFORMATIONS', payload: sortedCompaniesData.length });
-    dispatch({ type: 'SET_COMPANIES_INFORMATIONS_RESULT', payload: sortedCompaniesData });
-}
-
-const ErrorMessage = () => (
-    <AlertContainer>
-        Error
-    </AlertContainer>
-)
-
 const CompaniesTable = () => {
     const { state, dispatch } = useStore();
-    const [companiesDataError, setCompaniesDataError] = useState();
+    const [isAllCompaniesDataLoaded, setStatusAllCompaniesDataLoaded] = useState(false);
+    const [companiesDataError, setCompaniesDataError] = useState(false);
     const {companiesInformations, companiesFilteredInformations} = state;
 
+    const getCompaniesData = async companiesInformations => {
+        if(companiesInformations) return;
+        const basicCompaniesDataURL = `https://recruitment.hal.skygate.io/companies`;
+        const companyIncomesURL = `https://recruitment.hal.skygate.io/incomes/`;
+    
+        const basicCompaniesData = await getBasicCompaniesData(basicCompaniesDataURL);
+        if(basicCompaniesData.error) return setCompaniesDataError(basicCompaniesData.error);
+        const companiesData = await addIncomesForEveryCompany(basicCompaniesData, companyIncomesURL, setStatusAllCompaniesDataLoaded);
+        if(companiesData.error) return setCompaniesDataError(companiesData.error);
+        const sortedCompaniesData = sortCompaniesListDescending(companiesData);
+
+
+        dispatch({ type: 'SET_COMPANIES_INFORMATIONS_RESULT', payload: sortedCompaniesData });
+    }
+
     useEffect(() => {
-        getCompaniesData(companiesInformations, dispatch);
+        getCompaniesData(companiesInformations);
     }, []);
-
-
 
     const MainTable = () => (
         companiesFilteredInformations
@@ -89,12 +87,24 @@ const CompaniesTable = () => {
             : <AllCompaniesTable></AllCompaniesTable>
     )
 
-    if(companiesInformations) return (
+    const ErrorMessage = () => (
+        <AlertContainer>
+            {companiesDataError}
+        </AlertContainer>
+    )
+
+    const AllCompaniesDataNotLoaded = () => (
+        <AlertContainer>
+            Not all companies data are loaded, for more accurate data please refresh
+        </AlertContainer>
+    )
+
+    if(companiesDataError) return <ErrorMessage />
+    else if(companiesInformations) return (
         <MainTemplate>
-            {companiesDataError
-                ? <ErrorMessage></ErrorMessage>
-                : <SearchBar companiesInformations={companiesInformations}><MainTable /></SearchBar>
-            }
+            <SearchBar companiesInformations={companiesInformations} />
+            {isAllCompaniesDataLoaded && <AllCompaniesDataNotLoaded />}
+            <MainTable />
         </MainTemplate>
     ) 
     else return (
