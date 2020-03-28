@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useStore } from 'store';
 import InputText from 'components/atoms/InputText';
@@ -30,28 +30,33 @@ const ButtonsContainer = styled.div`
 
 const SearchBar = ({children, companiesInformations}) => {
     const { dispatch } = useStore();
-    const searchInput = useRef(null);
+    const [searchValue, setSearchValue] = useState("");
 
-    const filterCompanies = (searchInput, companiesInformations) => {
-        if(searchInput.current.value === "") return;
+    const filterCompanies = (searchValue, companiesInformations) => {
+        if(searchValue === "") return;
         const companiesFiltered = companiesInformations.flat().filter(companyData => companyData.name.toLowerCase().includes
-        (searchInput.current.value.toLowerCase())).map(companyData => companyData);
+        (searchValue.toLowerCase())).map(companyData => companyData);
         dispatch({ type: 'SET_FILTERED_COMPANIES_INFORMATIONS_RESULT', payload: companiesFiltered.length ? companiesFiltered : null });
     }
     
-    const clearfilterCompanies = searchInput => {
-        if(searchInput.current.value === "") return;
-        searchInput.current.value = "";
+    const clearfilterCompanies = searchValue => {
+        if(searchValue === "") return;
+        setSearchValue("");
         dispatch({ type: 'RESET_FILTERED_COMPANIES_INFORMATIONS_RESULT'});
     }
 
     return (
         <>
             <StyledWrapper>
-                <InputText searcher ref={searchInput} />
+                <InputText
+                    searcher
+                    value={searchValue}
+                    onChange={event => setSearchValue(event.target.value)}
+                    onKeyDown={event => event.key === 'Enter' && filterCompanies(searchValue, companiesInformations, dispatch)}
+                />
                 <ButtonsContainer>
-                    <Button searcher bgColor={"#7cc17c"} onClick={() => filterCompanies(searchInput, companiesInformations, dispatch)}>find</Button>
-                    <Button searcher bgColor={"#ef5858"} onClick={() => clearfilterCompanies(searchInput, dispatch)}>clear</Button>
+                    <Button searcher bgColor={"#7cc17c"} onClick={() => filterCompanies(searchValue, companiesInformations, dispatch)}>find</Button>
+                    <Button searcher bgColor={"#ef5858"} onClick={() => clearfilterCompanies(searchValue, dispatch)}>clear</Button>
                 </ButtonsContainer>
             </StyledWrapper>
             {children}
