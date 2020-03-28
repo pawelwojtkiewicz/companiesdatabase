@@ -32,11 +32,6 @@ const submitCompanyIncome = incomes => {
 
 const sortCompaniesListDescending = companiesData => companiesData.sort((a, b) => b.totalIncome - a.totalIncome);
 
-const splitResultIntoGroups = (array, cache = []) => {
-    while (array.length) cache.push(array.splice(0, 10));
-    return cache;
-}
-
 const addIncomesForEveryCompany = (basicCompaniesData, companyIncomesURL) => {
     const companyDataWithIncomes = basicCompaniesData.map(basicCompanyData => { 
         const companyId = basicCompanyData.id;
@@ -64,10 +59,9 @@ const getCompaniesData = async (companiesInformations, dispatch) => {
     const companiesData = await addIncomesForEveryCompany(basicCompaniesData, companyIncomesURL);
     if(companiesData.error) return handleError(companiesData, dispatch);
     const sortedCompaniesData = sortCompaniesListDescending(companiesData);
-    const splitedCompaniesData = splitResultIntoGroups(sortedCompaniesData);
 
-    dispatch({ type: 'SET_MAX_PAGES_COMPANIES_INFORMATIONS', payload: splitedCompaniesData.length });
-    dispatch({ type: 'SET_COMPANIES_INFORMATIONS_RESULT', payload: splitedCompaniesData });
+    dispatch({ type: 'SET_MAX_PAGES_COMPANIES_INFORMATIONS', payload: sortedCompaniesData.length });
+    dispatch({ type: 'SET_COMPANIES_INFORMATIONS_RESULT', payload: sortedCompaniesData });
 }
 
 const CompaniesTable = () => {

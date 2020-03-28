@@ -1,18 +1,21 @@
 import React from 'react';
 import { useStore } from 'store';
 import CompanyTableElement from 'components/organisms/CompanyTableElement';
-import Pagination from 'components/organisms/Pagination';
+import Pagination from 'services/Pagination';
 
 const FilteredCompaniesTable = () => {
-    const { state, dispatch } = useStore();
-    const {companiesFiltered, companiesFilteredPagination} = state;
-    const {currentPage} = companiesFilteredPagination;
+    const { state } = useStore();
+    const {companiesFilteredInformations, companiesFilteredPaginationPage} = state;
+    const setCurrentPageAction = `SET_FILTERES_COMPANIES_INFORMATIONS_CURRENT_PAGE`;
 
     return (
-        <>
-            {companiesFiltered[currentPage - 1].map(company => <CompanyTableElement company={company} key={company.id}/>)}
-            <Pagination paginationParameters={companiesFilteredPagination} paginationType={"FILTERED"}/>          
-        </>
+        <Pagination
+            tableWithAllElements={companiesFilteredInformations}
+            actuallyPage={companiesFilteredPaginationPage}
+            setCurrentPageAction={setCurrentPageAction}
+            render={paginationData => (
+            paginationData.map(company => <CompanyTableElement company={company} key={company.id}/>)
+        )} />
     )
 }
 
