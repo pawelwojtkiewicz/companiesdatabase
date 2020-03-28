@@ -9,6 +9,7 @@ const StyledWrapper = styled.div`
     flex-wrap: wrap;
     align-items: center;
     height: 40px;
+    padding: 0 10px;
     
     @media (max-width: 750px) {
         & {

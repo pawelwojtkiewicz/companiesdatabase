@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useStore } from 'store';
 import MainTemplate from 'components/templates/MainTemplate'
 import SearchBar from 'components/organisms/SearchBar';
-import FilteredCompaniesTable from 'components/molecules/FilteredCompaniesTable';
-import AllCompaniesTable from 'components/molecules/AllCompaniesTable';
+import CompaniesTableContent from 'components/molecules/CompaniesTableContent';
 import AlertContainer from 'components/atoms/AlertContainer';
 import Loader from 'components/atoms/Loader';
 
@@ -73,19 +72,12 @@ const CompaniesTable = () => {
         if(companiesData.error) return setCompaniesDataError(companiesData.error);
         const sortedCompaniesData = sortCompaniesListDescending(companiesData);
 
-
         dispatch({ type: 'SET_COMPANIES_INFORMATIONS_RESULT', payload: sortedCompaniesData });
     }
 
     useEffect(() => {
         getCompaniesData(companiesInformations);
     }, []);
-
-    const MainTable = () => (
-        companiesFilteredInformations
-            ? <FilteredCompaniesTable></FilteredCompaniesTable>
-            : <AllCompaniesTable></AllCompaniesTable>
-    )
 
     const ErrorMessage = () => (
         <AlertContainer>
@@ -104,7 +96,7 @@ const CompaniesTable = () => {
         <MainTemplate>
             <SearchBar companiesInformations={companiesInformations} />
             {isAllCompaniesDataLoaded && <AllCompaniesDataNotLoaded />}
-            <MainTable />
+            <CompaniesTableContent companiesFilteredInformations={companiesFilteredInformations}/>
         </MainTemplate>
     ) 
     else return (
