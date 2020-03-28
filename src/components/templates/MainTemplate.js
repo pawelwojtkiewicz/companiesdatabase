@@ -4,7 +4,8 @@ import styled from 'styled-components';
 
 const StyledWrapper = styled.div`
   max-width: 900px;
-  margin: 50px auto 0 auto;
+  height: 100vh;
+  margin: auto;
 `;
 
 const MainTemplate = ({children}) => {

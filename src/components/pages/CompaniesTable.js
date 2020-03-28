@@ -4,6 +4,8 @@ import MainTemplate from 'components/templates/MainTemplate'
 import SearchBar from 'components/organisms/SearchBar';
 import FilteredCompaniesTable from 'components/molecules/FilteredCompaniesTable';
 import AllCompaniesTable from 'components/molecules/AllCompaniesTable';
+import AlertContainer from 'components/atoms/AlertContainer';
+import Loader from 'components/atoms/Loader';
 
 const getBasicCompaniesData = basicCompaniesDataURL => {
     return fetch(basicCompaniesDataURL)
@@ -64,6 +66,12 @@ const getCompaniesData = async (companiesInformations, dispatch) => {
     dispatch({ type: 'SET_COMPANIES_INFORMATIONS_RESULT', payload: sortedCompaniesData });
 }
 
+const ErrorMessage = () => (
+    <AlertContainer>
+        Error
+    </AlertContainer>
+)
+
 const CompaniesTable = () => {
     const { state, dispatch } = useStore();
     const [companiesDataError, setCompaniesDataError] = useState();
@@ -73,8 +81,7 @@ const CompaniesTable = () => {
         getCompaniesData(companiesInformations, dispatch);
     }, []);
 
-    const ErrorMessage = () => (<div>Fail to download date, please try again</div>)
-    const Loading = () => (<div>Ładowanie</div>)
+
 
     const MainTable = () => (
         companiesFilteredInformations
@@ -92,7 +99,7 @@ const CompaniesTable = () => {
     ) 
     else return (
         <MainTemplate>
-            <Loading />
+            <Loader />
         </MainTemplate>
     );
 }; 

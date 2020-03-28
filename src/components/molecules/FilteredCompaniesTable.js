@@ -1,19 +1,13 @@
 import React from 'react';
-import styled from 'styled-components';
 import { useStore } from 'store';
 import CompanyTableElement from 'components/organisms/CompanyTableElement';
 import Pagination from 'services/Pagination';
-
-const StyledElementNotFound = styled.div`
-    font-size: 20px;
-    text-align: center;
-    padding: 30px 0 0 0px;
-`;
+import AlertContainer from 'components/atoms/AlertContainer';
 
 const ElementNotFound = () => (
-    <StyledElementNotFound>
+    <AlertContainer>
         The given phrase has not been found.
-    </StyledElementNotFound>
+    </AlertContainer>
 )
 
 const FilteredCompaniesTable = () => {
