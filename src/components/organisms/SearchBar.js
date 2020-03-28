@@ -34,9 +34,8 @@ const SearchBar = ({children, companiesInformations}) => {
 
     const filterCompanies = (searchValue, companiesInformations) => {
         if(searchValue === "") return;
-        const companiesFiltered = companiesInformations.flat().filter(companyData => companyData.name.toLowerCase().includes
-        (searchValue.toLowerCase())).map(companyData => companyData);
-        dispatch({ type: 'SET_FILTERED_COMPANIES_INFORMATIONS_RESULT', payload: companiesFiltered.length ? companiesFiltered : null });
+        const companiesFiltered = companiesInformations.flat().filter(companyData => companyData.name.toLowerCase().includes(searchValue.toLowerCase())).map(companyData => companyData);
+        dispatch({ type: 'SET_FILTERED_COMPANIES_INFORMATIONS_RESULT', payload: companiesFiltered });
     }
     
     const clearfilterCompanies = searchValue => {
