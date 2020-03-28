@@ -67,7 +67,7 @@ const getCompaniesData = async (companiesInformations, dispatch) => {
 const CompaniesTable = () => {
     const { state, dispatch } = useStore();
     const [companiesDataError, setCompaniesDataError] = useState();
-    const {companiesInformations, companiesFiltered} = state;
+    const {companiesInformations, companiesFilteredInformations} = state;
 
     useEffect(() => {
         getCompaniesData(companiesInformations, dispatch);
@@ -77,7 +77,7 @@ const CompaniesTable = () => {
     const Loading = () => (<div>Ładowanie</div>)
 
     const MainTable = () => (
-        companiesFiltered
+        companiesFilteredInformations
             ? <FilteredCompaniesTable></FilteredCompaniesTable>
             : <AllCompaniesTable></AllCompaniesTable>
     )

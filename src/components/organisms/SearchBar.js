@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { useStore } from 'store';
 import InputText from 'components/atoms/InputText';
@@ -27,32 +27,23 @@ const ButtonsContainer = styled.div`
         }
     }
 `;
-const splitResultIntoGroups = (array, cache = []) => {
-    while (array.length) cache.push(array.splice(0, 10));
-    return cache;
-}
-
-const filterCompanies = (searchInput, companiesInformations, dispatch) => {
-    if(searchInput.current.value === "") return;
-
-    const companiesFiltered = companiesInformations.flat().filter(companyData => companyData.name.toLowerCase().includes
-    (searchInput.current.value.toLowerCase())).map(companyData => companyData);
-    
-    const companiesFilteredSplited = splitResultIntoGroups(companiesFiltered)
-    //dispatch({ type: 'SET_MAX_PAGES_COMPANIES_FILTERED', payload: companiesFilteredSplited.length });
-    dispatch({ type: 'SET_FILTERES_COMPANIES_INFORMATIONS_RESULT', payload: companiesFilteredSplited.length ? companiesFilteredSplited : null });
-}
-
-const clearfilterCompanies = (searchInput, dispatch) => {
-    if(searchInput.current.value === "") return;
-    searchInput.current.value = "";
-
-    //dispatch({ type: 'RESET_MAX_PAGES_COMPANIES_FILTERED'});
-}
 
 const SearchBar = ({children, companiesInformations}) => {
     const { dispatch } = useStore();
     const searchInput = useRef(null);
+
+    const filterCompanies = (searchInput, companiesInformations) => {
+        if(searchInput.current.value === "") return;
+        const companiesFiltered = companiesInformations.flat().filter(companyData => companyData.name.toLowerCase().includes
+        (searchInput.current.value.toLowerCase())).map(companyData => companyData);
+        dispatch({ type: 'SET_FILTERED_COMPANIES_INFORMATIONS_RESULT', payload: companiesFiltered.length ? companiesFiltered : null });
+    }
+    
+    const clearfilterCompanies = searchInput => {
+        if(searchInput.current.value === "") return;
+        searchInput.current.value = "";
+        dispatch({ type: 'RESET_FILTERED_COMPANIES_INFORMATIONS_RESULT'});
+    }
 
     return (
         <>
