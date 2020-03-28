@@ -13,11 +13,11 @@ const reducer = (state = defaultState, action = {}) => {
       return { ...state, companiesInformations: action.payload};
     case 'SET_COMPANIES_INFORMATIONS_CURRENT_PAGE':
       return { ...state, companiesPaginationPage: action.payload};
-    case 'SET_FILTERES_COMPANIES_INFORMATIONS_RESULT':
+    case 'SET_FILTERED_COMPANIES_INFORMATIONS_RESULT':
       return { ...state, companiesFilteredInformations: action.payload};
-    case 'RESET_FILTERES_COMPANIES_INFORMATIONS_RESULT':
+    case 'RESET_FILTERED_COMPANIES_INFORMATIONS_RESULT':
       return { ...state, companiesFilteredInformations: null};
-    case 'SET_FILTERES_COMPANIES_INFORMATIONS_CURRENT_PAGE':
+    case 'SET_FILTERED_COMPANIES_INFORMATIONS_CURRENT_PAGE':
       return { ...state, companiesFilteredPaginationPage: action.payload};
     default:
       return state;

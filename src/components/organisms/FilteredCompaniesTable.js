@@ -6,7 +6,7 @@ import Pagination from 'services/Pagination';
 const FilteredCompaniesTable = () => {
     const { state } = useStore();
     const {companiesFilteredInformations, companiesFilteredPaginationPage} = state;
-    const setCurrentPageAction = `SET_FILTERES_COMPANIES_INFORMATIONS_CURRENT_PAGE`;
+    const setCurrentPageAction = `SET_FILTERED_COMPANIES_INFORMATIONS_CURRENT_PAGE`;
 
     return (
         <Pagination

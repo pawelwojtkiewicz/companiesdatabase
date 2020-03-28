@@ -39,15 +39,15 @@ const filterCompanies = (searchInput, companiesInformations, dispatch) => {
     (searchInput.current.value.toLowerCase())).map(companyData => companyData);
     
     const companiesFilteredSplited = splitResultIntoGroups(companiesFiltered)
-    dispatch({ type: 'SET_MAX_PAGES_COMPANIES_FILTERED', payload: companiesFilteredSplited.length });
-    dispatch({ type: 'SET_COMPANIES_FILTERED', payload: companiesFilteredSplited.length ? companiesFilteredSplited : null });
+    //dispatch({ type: 'SET_MAX_PAGES_COMPANIES_FILTERED', payload: companiesFilteredSplited.length });
+    dispatch({ type: 'SET_FILTERES_COMPANIES_INFORMATIONS_RESULT', payload: companiesFilteredSplited.length ? companiesFilteredSplited : null });
 }
 
 const clearfilterCompanies = (searchInput, dispatch) => {
     if(searchInput.current.value === "") return;
     searchInput.current.value = "";
 
-    dispatch({ type: 'RESET_MAX_PAGES_COMPANIES_FILTERED'});
+    //dispatch({ type: 'RESET_MAX_PAGES_COMPANIES_FILTERED'});
 }
 
 const SearchBar = ({children, companiesInformations}) => {

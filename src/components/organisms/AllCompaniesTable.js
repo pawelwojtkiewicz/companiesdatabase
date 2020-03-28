@@ -17,17 +17,6 @@ const AllCompaniesTable = () => {
             paginationData.map(company => <CompanyTableElement company={company} key={company.id}/>)
         )} />
     )
-    // return (
-    //     // <>
-    //     //     {companiesInformations[currentPage - 1].map(company => <CompanyTableElement company={company} key={company.id}/>)}
-    //     //     <Pagination paginationParameters={companiesPagination} paginationType={"INFORMATIONS"}/>
-    //     // </>
-    //     <>
-    //         <Pagination render={({currentPageElements}) => (
-    //             currentPageElements.map(companyInformations => <div>Firma</div>)
-    //         )} />
-    //     </>
-    // )
 }
 
 export default AllCompaniesTable;
