@@ -1,6 +1,6 @@
 import React, {useReducer} from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import {AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import Button from 'components/atoms/Button';
 
@@ -18,18 +18,33 @@ const SectionHeader = styled.div`
     margin: 15px 0;
 `;
 
-const LineName = styled.div`
-    width: 120px;
+const CalculatingContainer = styled.div`
+    display: flex;
+    flex-wrap: wrap;
 `;
 
-const Line0 = styled.div`
+const CalculatingRow = styled.div`
+    display: flex;
+    width: 100%;
+
+    @media (max-width: 750px) {
+        & {
+            width: 100%
+        }
+    }
+`;
+
+const CalculationColumn = styled.div`
     display: flex;
     align-items: center;
+    width: 100%;
     height: 40px;
-`;
+    padding: 0 0 0 10px;
 
-const LineValue = styled.div`
- 
+    &:nth-child(odd) {
+        background-color: #f5f5f5;
+    }
+
 `;
 
 const summarizeAllValues = incomes => {
@@ -98,44 +113,45 @@ const CompanyAdvancedDetails = ({companyDetails}) => {
             <SectionHeader>
                 Custom calculate
             </SectionHeader>
-
-
-
-            <Line0>
-                <LineName>
-                    totalIncome:
-                </LineName>
-                <LineValue>
-                    {totalAndAvarageIncome.totalIncome}
-                </LineValue>
-            </Line0>
-            <Line0>
-                <LineName>
-                    avarageIncome:
-                </LineName>
-                <LineValue>
-                    {totalAndAvarageIncome.avarageIncome}
-                </LineValue>
-            </Line0>
-            <Line0>
-                <LineName>
-                    from:
-                </LineName>
-                <LineValue>
-                    <input type="date" name="startDate" onChange={handleInputDateRangeChange}/>
-                </LineValue>
-            </Line0>
-            <Line0>
-                <LineName>
-                    to:
-                </LineName>
-                <LineValue>
-                    <input type="date" name="endDate" onChange={handleInputDateRangeChange}/>
-                </LineValue>
-            </Line0>
-            <Button countRange bgColor={"#daa96c"} onClick={() => calculateTotalAndAvarageIncome(companyDetails, setTotalAndAvarageIncome, dateRange)}>
-                count
-            </Button>
+            <CalculatingContainer>
+                <CalculatingRow>
+                    <CalculationColumn>
+                        total income
+                    </CalculationColumn>
+                    <CalculationColumn>
+                        {totalAndAvarageIncome.totalIncome}
+                    </CalculationColumn>
+                </CalculatingRow>
+                <CalculatingRow>
+                    <CalculationColumn>
+                        avarage income
+                    </CalculationColumn>
+                    <CalculationColumn>
+                        {totalAndAvarageIncome.avarageIncome}
+                    </CalculationColumn>
+                </CalculatingRow>
+                <CalculatingRow>
+                    <CalculationColumn>
+                        date start
+                    </CalculationColumn>
+                    <CalculationColumn>
+                        <input type="date" name="startDate" onChange={handleInputDateRangeChange}/>
+                    </CalculationColumn>
+                </CalculatingRow>
+                <CalculatingRow>
+                    <CalculationColumn>
+                        date end
+                    </CalculationColumn>
+                    <CalculationColumn>
+                        <input type="date" name="endDate" onChange={handleInputDateRangeChange}/>
+                    </CalculationColumn>
+                </CalculatingRow>
+                <CalculatingRow>
+                    <Button countRange bgColor={"#daa96c"} onClick={() => calculateTotalAndAvarageIncome(companyDetails, setTotalAndAvarageIncome, dateRange)}>
+                        count
+                    </Button>
+                </CalculatingRow>
+            </CalculatingContainer>
         </StyledWrapper>
     )
 }

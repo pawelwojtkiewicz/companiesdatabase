@@ -37,6 +37,7 @@ const Button = styled.button`
         css`
             width: 100px;
             height: 35px;
+            margin: 20px auto;
     `}
 
     ${({ goBack }) => 
