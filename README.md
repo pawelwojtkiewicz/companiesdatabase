@@ -22,6 +22,7 @@
 # Application description
 The application provides us table with fetched companies data which include basic informations as a id, name city and total income.
 You can search company by name. When searcher find something it return paginated result, if find nothing return `The given phrase has not been found.` message.
+Search on `enter` works also.
 Button `clear` clear searcher and show main view
 Application remember last watched page before use searcher.
 By clicking on details the application show more specific company informations as a latest month income or total and avarage income selected by user by date range, also there is graph of monthly company incomes.
