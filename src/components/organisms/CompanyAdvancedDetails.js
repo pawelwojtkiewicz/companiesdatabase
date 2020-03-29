@@ -1,4 +1,4 @@
-import React, {useReducer} from 'react';
+import React, { useState, useReducer} from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import {AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
@@ -47,12 +47,23 @@ const CalculationColumn = styled.div`
 
 `;
 
+const CalculatingError = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+    margin: 20px 0 0 0;
+    background-color: #ffabab;
+    font-weight: 600;
+`;
+
 const summarizeAllValues = incomes => {
     if(!incomes.length) return 0;
     return incomes.reduce((acc, currentValue) => acc + Number(currentValue.value), 0);
 }
 
-const validateTotalAndAvarageIncome = dateRange => Object.values(dateRange).every(date => date !== null && date !== "")
+const validateTotalAndAvarageIncome = dateRange => Object.values(dateRange).some(date => date === null || date === "")
 
 const filterIncomesByDateRange = (allIncomes, timeStart, timeEnd) => allIncomes.filter(income => income.newDate >= timeStart && income.newDate <= timeEnd)
   
@@ -61,17 +72,15 @@ const summarizeAvarageValue = incomes => {
     return incomes.reduce((acc, currentValue) => (acc + Number(currentValue.value)), 0) / incomes.length;
 }
 
-const calculateTotalAndAvarageIncome = (companyDetails, setTotalAndAvarageIncome, dateRange) => {
-    const validationResult = validateTotalAndAvarageIncome(dateRange);
-    if (!validationResult) return setTotalAndAvarageIncome({avarageIncome: null, totalIncome: null});
+const calculateTotalAndAvarageIncome = (companyDetails, dateRange) => {
     const {allIncomes} = companyDetails;
-    const {startDate, endDate} = dateRange
+    const {startDate, endDate} = dateRange;
     const timeStart = startDate.slice(0, 7);
     const timeEnd = endDate.slice(0, 7);
     const filteredIncomes = filterIncomesByDateRange(allIncomes, timeStart, timeEnd);
-    const avarageIncome = summarizeAvarageValue(filteredIncomes).toFixed(2)
-    const totalIncome = summarizeAllValues(filteredIncomes).toFixed(2)
-    setTotalAndAvarageIncome({avarageIncome, totalIncome});
+    const avarageIncome = summarizeAvarageValue(filteredIncomes).toFixed(2);
+    const totalIncome = summarizeAllValues(filteredIncomes).toFixed(2);
+    return {avarageIncome, totalIncome};
 }
 
 const CompanyAdvancedDetails = ({companyDetails}) => {
@@ -90,8 +99,17 @@ const CompanyAdvancedDetails = ({companyDetails}) => {
     const handleInputDateRangeChange = event => setDateRange({
         [event.target.name]: event.target.value
     });
+    const [isError, setError] = useState(false);
 
     const grapthData = companyDetails.allIncomes.map(income => ({name: income.newDate, uv: income.value, pv: 2400, amt: 2400}));
+
+    const handleCalculateTotalAndAvarageIncome = () => {
+        const validationResult = validateTotalAndAvarageIncome(dateRange);
+        setError(validationResult);
+        if (validationResult) return setTotalAndAvarageIncome({avarageIncome: null, totalIncome: null});
+        const {avarageIncome, totalIncome} = calculateTotalAndAvarageIncome(companyDetails, dateRange);
+        setTotalAndAvarageIncome({avarageIncome, totalIncome});
+    }
 
     return (
         <StyledWrapper>
@@ -119,7 +137,9 @@ const CompanyAdvancedDetails = ({companyDetails}) => {
                         total income
                     </CalculationColumn>
                     <CalculationColumn>
-                        {totalAndAvarageIncome.totalIncome}
+                        {typeof totalAndAvarageIncome.totalIncome === "number"
+                            ? totalAndAvarageIncome.totalIncome.toFixed(2)
+                            : totalAndAvarageIncome.totalIncome}
                     </CalculationColumn>
                 </CalculatingRow>
                 <CalculatingRow>
@@ -146,8 +166,11 @@ const CompanyAdvancedDetails = ({companyDetails}) => {
                         <input type="date" name="endDate" onChange={handleInputDateRangeChange}/>
                     </CalculationColumn>
                 </CalculatingRow>
+                {isError && <CalculatingError>
+                    one of necessary parameter is empty
+                </CalculatingError>}
                 <CalculatingRow>
-                    <Button countRange bgColor={"#daa96c"} onClick={() => calculateTotalAndAvarageIncome(companyDetails, setTotalAndAvarageIncome, dateRange)}>
+                    <Button countRange bgColor={"#daa96c"} onClick={handleCalculateTotalAndAvarageIncome}>
                         count
                     </Button>
                 </CalculatingRow>
