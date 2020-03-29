@@ -39,7 +39,6 @@ const SearchBar = ({companiesInformations}) => {
     }
     
     const clearfilterCompanies = searchValue => {
-        if(searchValue === "") return;
         setSearchValue("");
         dispatch({ type: 'RESET_FILTERED_COMPANIES_INFORMATIONS_RESULT'});
     }
