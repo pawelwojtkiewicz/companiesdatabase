@@ -1,20 +1,31 @@
 import React, {useReducer} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import {AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import Button from 'components/atoms/Button';
 
 const StyledWrapper = styled.div`
     margin: 20px 0 0 0;
 `;
 
-const Line = styled.div`
-    display: flex;
-    align-items: center;
-    height: 40px;
+const GraphContainer = styled.div`
+    height: 400px;
+    padding: 0 0 0 10px;
+`;
+
+const GraphHeader = styled.div`
+    font-size: 20px;
+    margin: 15px 0;
 `;
 
 const LineName = styled.div`
     width: 120px;
+`;
+
+const Line0 = styled.div`
+    display: flex;
+    align-items: center;
+    height: 40px;
 `;
 
 const LineValue = styled.div`
@@ -66,41 +77,58 @@ const CompanyAdvancedDetails = ({companyDetails}) => {
     const handleInputDateRangeChange = event => setDateRange({
         [event.target.name]: event.target.value
     });
-    
+
+    const grapthData = companyDetails.allIncomes.map(income => ({name: income.newDate, uv: income.value, pv: 2400, amt: 2400}));
+
     return (
         <StyledWrapper>
-            <Line>
+            <GraphHeader>
+                All company income graph
+            </GraphHeader>
+            <GraphContainer>
+                <ResponsiveContainer>
+                    <AreaChart data={grapthData}
+                        margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+                    <CartesianGrid strokeDasharray="3 3"/>
+                    <XAxis dataKey="name"/>
+                    <YAxis/>
+                    <Tooltip/>
+                    <Area type='monotone' dataKey='uv' stroke='#8884d8' fill='#8884d8' />
+                    </AreaChart>
+                </ResponsiveContainer>
+            </GraphContainer>
+            <Line0>
                 <LineName>
                     totalIncome:
                 </LineName>
                 <LineValue>
                     {totalAndAvarageIncome.totalIncome}
                 </LineValue>
-            </Line>
-            <Line>
+            </Line0>
+            <Line0>
                 <LineName>
                     avarageIncome:
                 </LineName>
                 <LineValue>
                     {totalAndAvarageIncome.avarageIncome}
                 </LineValue>
-            </Line>
-            <Line>
+            </Line0>
+            <Line0>
                 <LineName>
                     from:
                 </LineName>
                 <LineValue>
                     <input type="date" name="startDate" onChange={handleInputDateRangeChange}/>
                 </LineValue>
-            </Line>
-            <Line>
+            </Line0>
+            <Line0>
                 <LineName>
                     to:
                 </LineName>
                 <LineValue>
                     <input type="date" name="endDate" onChange={handleInputDateRangeChange}/>
                 </LineValue>
-            </Line>
+            </Line0>
             <Button countRange bgColor={"#daa96c"} onClick={() => calculateTotalAndAvarageIncome(companyDetails, setTotalAndAvarageIncome, dateRange)}>
                 count
             </Button>

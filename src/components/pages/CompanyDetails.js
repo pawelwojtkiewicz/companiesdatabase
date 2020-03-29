@@ -37,6 +37,7 @@ const CompanyDetails = ({location}) => {
   const [lastMonthIncome, setLastMonthIncome] = useState(0);
 
   const handleSegregationIncomes = () => {
+    if(!companyDetails) return;
     const {allIncomes} = companyDetails
     segregateDescendingIncomes(allIncomes);
     getYearAndMonth(allIncomes);
