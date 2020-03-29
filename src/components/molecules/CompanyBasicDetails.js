@@ -3,57 +3,67 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const StyledWrapper = styled.div`
- 
+    margin: 15px 0 0 0;
 `;
 
-const Line = styled.div`
+const TableHeader = styled.div`
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     height: 40px;
+    padding: 0 10px;
+    background-color: #f5f5f5;
 `;
 
-const LineName = styled.div`
-    width: 120px;
+const TableBody = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    height: 40px;
+    padding: 0 10px;
 `;
 
-const LineValue = styled.div`
- 
+const Column = styled.div`
+    display: flex;
+    width: 20%;
 `;
 
 const CompanyBasicDetails = ({companyDetails, lastMonthIncome}) => (
     <StyledWrapper>
-        <Line>
-            <LineName>
-                id:
-            </LineName>
-            <LineValue>
+        <TableHeader>
+            <Column>
+                ID
+            </Column>
+            <Column>
+                NAME
+            </Column>
+            <Column>
+                CITY
+            </Column>
+            <Column>
+                TOTAL INCOME
+            </Column>
+            <Column>
+                LAST MONTH INCOME
+            </Column>
+        </TableHeader>
+        <TableBody>
+            <Column>
                 {companyDetails.id}
-            </LineValue>
-        </Line>
-        <Line>
-            <LineName>
-                name:
-            </LineName>
-            <LineValue>
+            </Column>
+            <Column>
                 {companyDetails.name}
-            </LineValue>
-        </Line>
-        <Line>
-            <LineName>
-                city:
-            </LineName>
-            <LineValue>
+            </Column>
+            <Column>
                 {companyDetails.city}
-            </LineValue>
-        </Line>
-        <Line>
-            <LineName>
-                last month income:
-            </LineName>
-            <LineValue>
+            </Column>
+            <Column>
+                {companyDetails.totalIncome.toFixed(2)} €
+            </Column>
+            <Column>
                 {lastMonthIncome}
-            </LineValue>
-        </Line>
+            </Column>
+        </TableBody>
     </StyledWrapper>
 )
 

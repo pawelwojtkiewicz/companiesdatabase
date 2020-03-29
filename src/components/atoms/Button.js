@@ -2,7 +2,17 @@ import styled, {css} from 'styled-components';
 
 const Button = styled.button`
     border: 0;
+    padding: 0;
     cursor: pointer;
+    
+    a{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        color: #000000;
+        text-decoration: none;
+    }
     
     ${({ bgColor }) => bgColor && css`background-color: ${bgColor};`}
 

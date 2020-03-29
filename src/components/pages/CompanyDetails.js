@@ -60,9 +60,9 @@ const CompanyDetails = ({location}) => {
   if(!state.companiesInformations) return <Redirect to="/companiesData" />
   return (
     <MainTemplate>
+      <Button goBack bgColor={"#e686a1"}><Link to="/companiesData">BACK</Link></Button>
       <CompanyBasicDetails companyDetails={companyDetails} lastMonthIncome={lastMonthIncome}/>
       <CompanyAdvancedDetails companyDetails={companyDetails}/>
-      <Button goBack bgColor={"#e686a1"}><Link to="/companiesData">BACK</Link></Button>
     </MainTemplate>
   )
 };
