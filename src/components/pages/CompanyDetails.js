@@ -35,15 +35,16 @@ const CompanyDetails = ({location}) => {
   const { state } = useStore();
   const [companyDetails, setCompanyDetails] = useState(getCompanyDetais(state.companiesInformations, location.pathname));
   const [lastMonthIncome, setLastMonthIncome] = useState(0);
-
+  console.log(companyDetails)
   const handleSegregationIncomes = () => {
     if(!companyDetails) return;
-    const {allIncomes} = companyDetails
+    const copyCompanyDetails = {...companyDetails};
+    const {allIncomes} = copyCompanyDetails
     segregateDescendingIncomes(allIncomes);
     getYearAndMonth(allIncomes);
     const segregatedIncomes = segregateByMonths(allIncomes);
-    companyDetails.allIncomes = segregatedIncomes;
-    setLastMonthIncome(companyDetails.allIncomes[0].value);
+    copyCompanyDetails.allIncomes = segregatedIncomes;
+    setLastMonthIncome(copyCompanyDetails.allIncomes[0].value);
   } 
 
   useEffect(() => {handleSegregationIncomes()}, []);
