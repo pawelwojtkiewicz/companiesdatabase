@@ -48,6 +48,7 @@ const SearchBar = ({companiesInformations}) => {
         <StyledWrapper>
             <InputText
                 searcher
+                placeholder={"search by name"}
                 value={searchValue}
                 onChange={event => setSearchValue(event.target.value)}
                 onKeyDown={event => event.key === 'Enter' && filterCompanies(searchValue, companiesInformations, dispatch)}

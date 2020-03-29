@@ -26,9 +26,33 @@ const Column = styled.div`
 
     @media (max-width: 750px) {
         & {
-            justify-content: center;
+            width: calc(100% - 160px);
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 0 0 10px;
+        }
+
+        &:last-child {
             width: 100%;
-            min-height: 25px;
+            padding: 0;
+            justify-content: center;
+            margin: 10px 0;
+        }
+    }
+`;
+
+const PreColumn = styled.div`
+    display: none;
+
+    @media (max-width: 750px) {
+        & {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: 140px;
+            padding: 0 0 0 10px;
+            background-color: #f5f5f5;
         }
     }
 `;
@@ -40,15 +64,27 @@ const CompaniesTable = ({company}) => {
     if(redirect) return <Redirect to={`/companiesData/details/${company.id}`} />
     return (
         <StyledWrapper>
+            <PreColumn>
+                ID
+            </PreColumn>
             <Column>
                 {company.id}
             </Column>
+            <PreColumn>
+                NAME
+            </PreColumn>
             <Column>
                 {company.name}
             </Column>
+            <PreColumn>
+                CITY
+            </PreColumn>
             <Column>
                 {company.city}
             </Column>
+            <PreColumn>
+                TOTAL INCOME
+            </PreColumn>
             <Column>
                 {company.totalIncome.toFixed(2)} €
             </Column>

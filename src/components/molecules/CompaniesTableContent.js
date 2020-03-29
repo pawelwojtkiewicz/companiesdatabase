@@ -14,6 +14,12 @@ const TableHeader = styled.div`
     height: 40px;
     padding: 0 10px;
     background-color: #f5f5f5;
+
+    @media (max-width: 750px) {
+        & {
+            display: none;
+        }
+    }
 `;
 
 const Column = styled.div`
