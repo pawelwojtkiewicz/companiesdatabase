@@ -21,42 +21,32 @@ const getCompanyDetais = (companiesInformations, pathname) => {
   return companyDetails
 }
 
-const getLatestsDate = allIncomes => {
-  const extractYearAndMonth = lastMonth => ({year: lastMonth.getFullYear(), month: lastMonth.getMonth()});
+const segregateDescendingIncomes = allIncomes => allIncomes.sort((a, b) => -1 * (new Date(a.date) - new Date(b.date)));
 
-  const latestsDate = new Date(Math.max.apply(null, allIncomes.map(e => new Date(e.date))));
-  const extractedLatestsDate = extractYearAndMonth(latestsDate)
+const getYearAndMonth = allIncomes => allIncomes.map(income => income.newDate = income.date.slice(0, 7));
 
-  return extractedLatestsDate;
-}
-
-const getSameLatestsDate = (allIncomes, year, month) => allIncomes.filter(income => {
-  const incomeDate = new Date(income.date)
-  if (incomeDate.getFullYear() === year  && incomeDate.getMonth() === month) return income;
-})
-
-const summarizeAllValues = incomes => {
-  if(!incomes.length) return 0;
-  return incomes.reduce((acc, currentValue) => acc + Number(currentValue.value), 0);
-}
-
-const handleLastMonthIncome = (companyDetails, setLastMonthIncome) => {
-  if(!companyDetails) return;
-  const { allIncomes } = companyDetails;
-
-  const {year, month} = getLatestsDate(allIncomes);
-  const latesDates = getSameLatestsDate(allIncomes, year, month);
-  const summarizedLatestsDateIncomes = summarizeAllValues(latesDates);
-
-  setLastMonthIncome(summarizedLatestsDateIncomes);
-}
+const segregateByMonths = allIncomes => allIncomes.reduce((acc, element) => {
+  acc.find(a => a.newDate === element.newDate) 
+  ? acc.find(a => a.newDate === element.newDate).value += Number(element.value) 
+  : acc.push({newDate: element.newDate, value: Number(element.value)
+}); return acc}, []);
 
 const CompanyDetails = ({location}) => {
   const { state } = useStore();
   const [companyDetails, setCompanyDetails] = useState(getCompanyDetais(state.companiesInformations, location.pathname));
   const [lastMonthIncome, setLastMonthIncome] = useState(0);
-  useEffect(() => handleLastMonthIncome(companyDetails, setLastMonthIncome), []);
 
+  const handleSegregationIncomes = () => {
+    const {allIncomes} = companyDetails
+    segregateDescendingIncomes(allIncomes);
+    getYearAndMonth(allIncomes);
+    const segregatedIncomes = segregateByMonths(allIncomes);
+    companyDetails.allIncomes = segregatedIncomes;
+    setLastMonthIncome(companyDetails.allIncomes[0].value);
+  } 
+
+  useEffect(() => {handleSegregationIncomes()}, []);
+  console.log(lastMonthIncome);
   if(!state.companiesInformations) return <Redirect to="/companiesData" />
   return (
     <MainTemplate>
