@@ -53,9 +53,7 @@ const calculateTotalAndAvarageIncome = (companyDetails, setTotalAndAvarageIncome
     const {startDate, endDate} = dateRange
     const timeStart = startDate.slice(0, 7);
     const timeEnd = endDate.slice(0, 7);
-    console.log(allIncomes, timeStart, timeEnd);
     const filteredIncomes = filterIncomesByDateRange(allIncomes, timeStart, timeEnd);
-    console.log(filteredIncomes)
     const avarageIncome = summarizeAvarageValue(filteredIncomes).toFixed(2)
     const totalIncome = summarizeAllValues(filteredIncomes).toFixed(2)
     setTotalAndAvarageIncome({avarageIncome, totalIncome});

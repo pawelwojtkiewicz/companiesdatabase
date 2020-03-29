@@ -35,7 +35,6 @@ const CompanyDetails = ({location}) => {
   const { state } = useStore();
   const [companyDetails, setCompanyDetails] = useState(getCompanyDetais(state.companiesInformations, location.pathname));
   const [lastMonthIncome, setLastMonthIncome] = useState(0);
-  console.log(companyDetails)
   const handleSegregationIncomes = () => {
     if(!companyDetails) return;
     const copyCompanyDetails = {...companyDetails};
