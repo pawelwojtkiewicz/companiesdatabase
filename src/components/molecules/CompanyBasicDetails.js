@@ -114,7 +114,7 @@ const CompanyBasicDetails = ({companyDetails, lastMonthIncome}) => (
                 LAST MONTH INCOME
             </PreColumn>
             <Column>
-                {lastMonthIncome}
+                {lastMonthIncome.toFixed(2)} €
             </Column>
         </TableBody>
     </StyledWrapper>
