@@ -13,6 +13,12 @@ const TableHeader = styled.div`
     height: 40px;
     padding: 0 10px;
     background-color: #f5f5f5;
+
+    @media (max-width: 750px) {
+        & {
+           display: none;
+        }
+    }
 `;
 
 const TableBody = styled.div`
@@ -21,11 +27,43 @@ const TableBody = styled.div`
     align-items: center;
     height: 40px;
     padding: 0 10px;
+
+    @media (max-width: 750px) {
+        & {
+            height: unset;
+            padding: 0;
+        }
+    }
 `;
 
 const Column = styled.div`
     display: flex;
     width: 20%;
+
+    @media (max-width: 750px) {
+        & {
+            width: calc(100% - 160px);
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 0 0 10px;
+        }
+    }
+`;
+
+const PreColumn = styled.div`
+    display: none;
+
+    @media (max-width: 750px) {
+        & {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: 140px;
+            padding: 0 0 0 10px;
+            background-color: #f5f5f5;
+        }
+    }
 `;
 
 const CompanyBasicDetails = ({companyDetails, lastMonthIncome}) => (
@@ -48,18 +86,33 @@ const CompanyBasicDetails = ({companyDetails, lastMonthIncome}) => (
             </Column>
         </TableHeader>
         <TableBody>
+            <PreColumn>
+                ID
+            </PreColumn>
             <Column>
                 {companyDetails.id}
             </Column>
+            <PreColumn>
+                NAME
+            </PreColumn>
             <Column>
                 {companyDetails.name}
             </Column>
+            <PreColumn>
+                CITY
+            </PreColumn>
             <Column>
                 {companyDetails.city}
             </Column>
+            <PreColumn>
+                TOTAL INCOME
+            </PreColumn>
             <Column>
                 {companyDetails.totalIncome.toFixed(2)} €
             </Column>
+            <PreColumn>
+                LAST MONTH INCOME
+            </PreColumn>
             <Column>
                 {lastMonthIncome}
             </Column>
