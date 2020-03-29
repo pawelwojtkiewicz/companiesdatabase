@@ -7,7 +7,7 @@
 - render props
 - Provider
 - PropTypes
-- AtomDesign
+- AtomicDesign
 
 # API
 - for basic companies informations: https://recruitment.hal.skygate.io/companies
