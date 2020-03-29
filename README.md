@@ -4,6 +4,7 @@
 - React
 - styled-components
 - hooks
+- render props
 - Provider
 - PropTypes
 - AtomDesign
@@ -12,14 +13,18 @@
 - for basic companies informations: https://recruitment.hal.skygate.io/companies
 - for companany income: https://recruitment.hal.skygate.io/incomes/:id
 
+# Outside packages
+- Recharts: https://github.com/recharts/recharts
+
 # Additional information
 - added jsconfig.json for path changes. The source folder is /src
 
 # Application description
 The application provides us table with fetched companies data which include basic informations as a id, name city and total income.
-By clicking on details the application show more specific company informations as a latest month income or total and avarage income selected by user by date range.
-There is also company searcher that filter by company name.
-Table with all companies and searched elements are paginated and the application remember last page where user was before using searcher.
+You can search company by name. When searcher find something it return paginated result, if find nothing return `The given phrase has not been found.` message.
+Button `clear` clear searcher and show main view
+Application remember last watched page before use searcher.
+By clicking on details the application show more specific company informations as a latest month income or total and avarage income selected by user by date range, also there is graph of monthly company incomes.
 
 # To run application for working on it:
 `npm install`<br>
