@@ -83,7 +83,7 @@ const calculateTotalAndAvarageIncome = (companyDetails, dateRange) => {
     return {avarageIncome, totalIncome};
 }
 
-const CompanyAdvancedDetails = ({companyDetails}) => {
+const CompanyAdvancedDetails = ({segregatedCompanyDetails}) => {
     const [totalAndAvarageIncome, setTotalAndAvarageIncome] = useReducer((state, newState) => ({...state, ...newState}),
         {
           avarageIncome: "choose range",
@@ -101,13 +101,13 @@ const CompanyAdvancedDetails = ({companyDetails}) => {
     });
     const [isError, setError] = useState(false);
 
-    const grapthData = companyDetails.allIncomes.map(income => ({name: income.newDate, uv: income.value, pv: 2400, amt: 2400}));
+    const grapthData = segregatedCompanyDetails.allIncomes.map(income => ({name: income.newDate, uv: income.value, pv: 2400, amt: 2400}));
 
     const handleCalculateTotalAndAvarageIncome = () => {
         const validationResult = validateTotalAndAvarageIncome(dateRange);
         setError(validationResult);
         if (validationResult) return setTotalAndAvarageIncome({avarageIncome: null, totalIncome: null});
-        const {avarageIncome, totalIncome} = calculateTotalAndAvarageIncome(companyDetails, dateRange);
+        const {avarageIncome, totalIncome} = calculateTotalAndAvarageIncome(segregatedCompanyDetails, dateRange);
         setTotalAndAvarageIncome({avarageIncome, totalIncome});
     }
 
@@ -180,7 +180,7 @@ const CompanyAdvancedDetails = ({companyDetails}) => {
 }
 
 CompanyAdvancedDetails.propTypes = {
-    companyDetails: PropTypes.shape({
+    segregatedCompanyDetails: PropTypes.shape({
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
         city: PropTypes.string.isRequired,

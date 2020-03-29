@@ -66,7 +66,7 @@ const PreColumn = styled.div`
     }
 `;
 
-const CompanyBasicDetails = ({companyDetails, lastMonthIncome}) => (
+const CompanyBasicDetails = ({segregatedCompanyDetails, lastMonthIncome}) => (
     <StyledWrapper>
         <TableHeader>
             <Column>
@@ -90,25 +90,25 @@ const CompanyBasicDetails = ({companyDetails, lastMonthIncome}) => (
                 ID
             </PreColumn>
             <Column>
-                {companyDetails.id}
+                {segregatedCompanyDetails.id}
             </Column>
             <PreColumn>
                 NAME
             </PreColumn>
             <Column>
-                {companyDetails.name}
+                {segregatedCompanyDetails.name}
             </Column>
             <PreColumn>
                 CITY
             </PreColumn>
             <Column>
-                {companyDetails.city}
+                {segregatedCompanyDetails.city}
             </Column>
             <PreColumn>
                 TOTAL INCOME
             </PreColumn>
             <Column>
-                {companyDetails.totalIncome.toFixed(2)} €
+                {segregatedCompanyDetails.totalIncome.toFixed(2)} €
             </Column>
             <PreColumn>
                 LAST MONTH INCOME
@@ -122,7 +122,7 @@ const CompanyBasicDetails = ({companyDetails, lastMonthIncome}) => (
 
 
 CompanyBasicDetails.propTypes = {
-    companyDetails: PropTypes.shape({
+    segregatedCompanyDetails: PropTypes.shape({
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
         city: PropTypes.string.isRequired,

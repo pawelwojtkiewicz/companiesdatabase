@@ -34,28 +34,32 @@ const segregateByMonths = allIncomes => allIncomes.reduce((acc, element) => {
 const CompanyDetails = ({location}) => {
   const { state } = useStore();
   const [companyDetails, setCompanyDetails] = useState(getCompanyDetais(state.companiesInformations, location.pathname));
+  const [segregatedCompanyDetails, setSegregatedCompanyDetails] = useState();
   const [lastMonthIncome, setLastMonthIncome] = useState(0);
+  
   const handleSegregationIncomes = () => {
     if(!companyDetails) return;
     const copyCompanyDetails = {...companyDetails};
-    const {allIncomes} = copyCompanyDetails
+    const {allIncomes} = companyDetails
     segregateDescendingIncomes(allIncomes);
     getYearAndMonth(allIncomes);
     const segregatedIncomes = segregateByMonths(allIncomes);
     copyCompanyDetails.allIncomes = segregatedIncomes;
+    setSegregatedCompanyDetails(copyCompanyDetails);
     setLastMonthIncome(copyCompanyDetails.allIncomes[0].value);
   } 
 
   useEffect(() => {handleSegregationIncomes()}, []);
 
   if(!state.companiesInformations) return <Redirect to="/companiesData" />
-  return (
+  if(segregatedCompanyDetails) return (
     <MainTemplate>
       <Button goBack bgColor={"#e686a1"}><Link to="/companiesData">BACK</Link></Button>
-      <CompanyBasicDetails companyDetails={companyDetails} lastMonthIncome={lastMonthIncome}/>
-      <CompanyAdvancedDetails companyDetails={companyDetails}/>
+      <CompanyBasicDetails segregatedCompanyDetails={segregatedCompanyDetails} lastMonthIncome={lastMonthIncome}/>
+      <CompanyAdvancedDetails segregatedCompanyDetails={segregatedCompanyDetails}/>
     </MainTemplate>
   )
+  else return <></>
 };
 
 CompanyDetails.propTypes = {
