@@ -13,7 +13,7 @@ const GraphContainer = styled.div`
     padding: 0 0 0 10px;
 `;
 
-const GraphHeader = styled.div`
+const SectionHeader = styled.div`
     font-size: 20px;
     margin: 15px 0;
 `;
@@ -82,9 +82,9 @@ const CompanyAdvancedDetails = ({companyDetails}) => {
 
     return (
         <StyledWrapper>
-            <GraphHeader>
+            <SectionHeader>
                 All company income graph
-            </GraphHeader>
+            </SectionHeader>
             <GraphContainer>
                 <ResponsiveContainer>
                     <AreaChart data={grapthData}
@@ -97,6 +97,12 @@ const CompanyAdvancedDetails = ({companyDetails}) => {
                     </AreaChart>
                 </ResponsiveContainer>
             </GraphContainer>
+            <SectionHeader>
+                Custom calculate
+            </SectionHeader>
+
+
+
             <Line0>
                 <LineName>
                     totalIncome:
@@ -142,8 +148,8 @@ CompanyAdvancedDetails.propTypes = {
         name: PropTypes.string.isRequired,
         city: PropTypes.string.isRequired,
         allIncomes: PropTypes.arrayOf(PropTypes.shape({
-            value: PropTypes.string.isRequired,
-            date: PropTypes.string.isRequired
+            value: PropTypes.isRequired,
+            date: PropTypes.isRequired
         })).isRequired,
         totalIncome: PropTypes.number.isRequired
     }).isRequired

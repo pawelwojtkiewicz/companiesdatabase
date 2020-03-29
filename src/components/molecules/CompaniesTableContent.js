@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import FilteredCompaniesTable from 'components/molecules/FilteredCompaniesTable';
 import AllCompaniesTable from 'components/molecules/AllCompaniesTable';
@@ -42,5 +43,9 @@ const CompaniesTableContent = ({companiesFilteredInformations}) => (
             : <AllCompaniesTable />}
     </StyledWrapper>
 )
+
+CompaniesTableContent.propTypes = {
+    companiesFilteredInformations: PropTypes.array
+};
 
 export default CompaniesTableContent;

@@ -67,14 +67,15 @@ const CompanyBasicDetails = ({companyDetails, lastMonthIncome}) => (
     </StyledWrapper>
 )
 
+
 CompanyBasicDetails.propTypes = {
     companyDetails: PropTypes.shape({
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
         city: PropTypes.string.isRequired,
         allIncomes: PropTypes.arrayOf(PropTypes.shape({
-            value: PropTypes.string.isRequired,
-            date: PropTypes.string.isRequired
+            value: PropTypes.isRequired,
+            newDate: PropTypes.isRequired
           })).isRequired,
         totalIncome: PropTypes.number.isRequired
     }).isRequired,
