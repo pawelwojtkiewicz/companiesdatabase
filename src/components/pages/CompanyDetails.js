@@ -26,8 +26,8 @@ const segregateDescendingIncomes = allIncomes => allIncomes.sort((a, b) => -1 * 
 const getYearAndMonth = allIncomes => allIncomes.map(income => income.newDate = income.date.slice(0, 7));
 
 const segregateByMonths = allIncomes => allIncomes.reduce((acc, element) => {
-  acc.find(a => a.newDate === element.newDate) 
-  ? acc.find(a => a.newDate === element.newDate).value += Number(element.value) 
+  acc.find(el => el.newDate === element.newDate) 
+  ? acc.find(el => el.newDate === element.newDate).value += Number(element.value) 
   : acc.push({newDate: element.newDate, value: Number(element.value)
 }); return acc}, []);
 
@@ -46,7 +46,7 @@ const CompanyDetails = ({location}) => {
   } 
 
   useEffect(() => {handleSegregationIncomes()}, []);
-  console.log(lastMonthIncome);
+
   if(!state.companiesInformations) return <Redirect to="/companiesData" />
   return (
     <MainTemplate>

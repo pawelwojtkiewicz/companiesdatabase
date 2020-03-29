@@ -26,27 +26,28 @@ const summarizeAllValues = incomes => {
     return incomes.reduce((acc, currentValue) => acc + Number(currentValue.value), 0);
 }
 
+const validateTotalAndAvarageIncome = dateRange => Object.values(dateRange).every(date => date !== null && date !== "")
+
+const filterIncomesByDateRange = (allIncomes, timeStart, timeEnd) => allIncomes.filter(income => income.newDate >= timeStart && income.newDate <= timeEnd)
+  
+const summarizeAvarageValue = incomes => {
+    if(!incomes.length) return 0;
+    return incomes.reduce((acc, currentValue) => (acc + Number(currentValue.value)), 0) / incomes.length;
+}
+
 const calculateTotalAndAvarageIncome = (companyDetails, setTotalAndAvarageIncome, dateRange) => {
     const validationResult = validateTotalAndAvarageIncome(dateRange);
     if (!validationResult) return setTotalAndAvarageIncome({avarageIncome: null, totalIncome: null});
     const {allIncomes} = companyDetails;
     const {startDate, endDate} = dateRange
-    const timeStart = new Date(startDate).getTime();
-    const timeEnd = new Date(endDate).getTime();
+    const timeStart = startDate.slice(0, 7);
+    const timeEnd = endDate.slice(0, 7);
+    console.log(allIncomes, timeStart, timeEnd);
     const filteredIncomes = filterIncomesByDateRange(allIncomes, timeStart, timeEnd);
-    
+    console.log(filteredIncomes)
     const avarageIncome = summarizeAvarageValue(filteredIncomes).toFixed(2)
     const totalIncome = summarizeAllValues(filteredIncomes).toFixed(2)
     setTotalAndAvarageIncome({avarageIncome, totalIncome});
-}
-
-  const validateTotalAndAvarageIncome = dateRange => Object.values(dateRange).every(date => date !== null && date !== "")
-
-  const filterIncomesByDateRange = (allIncomes, timeStart, timeEnd) => allIncomes.filter(income => new Date(income.date).getTime() >= timeStart && new Date(income.date).getTime() <= timeEnd);
-  
-  const summarizeAvarageValue = incomes => {
-    if(!incomes.length) return 0;
-    return incomes.reduce((acc, currentValue) => (acc + Number(currentValue.value)), 0) / incomes.length;
 }
 
 const CompanyAdvancedDetails = ({companyDetails}) => {
